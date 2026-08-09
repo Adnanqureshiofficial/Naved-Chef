@@ -1,0 +1,78 @@
+---
+// Placeholder copy — swap in real name, hotel, and signature line.
+---
+<section class="hero" id="hero">
+  <div class="hero__bg" aria-hidden="true" id="hero-bg">
+    <img src="/images/hero.jpg" alt="" />
+  </div>
+  <div class="hero__scrim" aria-hidden="true"></div>
+  <div class="container hero__content">
+    <p class="eyebrow hero__badge" id="hero-badge">Chef de Partie – Pastry & Bakery, Taj Hotels</p>
+    <h1 class="hero__title font-display" id="hero-title">SHAIKH NAVED</h1>
+    <p class="hero__tagline" id="hero-tagline">Experienced Bakery & Pastry professional with over 9 years of progressive experience in luxury and
+five-star hotel kitchens. Expertise in pastry production, buffet operations, cake shop management, team
+supervision, menu planning, SAP ordering, and audit compliance</p>
+  </div>
+  <div class="hero__scroll-cue" aria-hidden="true">
+    <span></span>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+
+    background: var(--color-surface);
+  }
+  .hero__bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+object-position: top;
+    border-radius: 0;
+  }
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, var(--color-bg) 5%, rgba(20,18,16,0.2) 60%);
+  }
+  .hero__content {
+    position: relative;
+    padding-bottom: clamp(48px, 8vh, 100px);
+  }
+  .hero__badge { margin-bottom: 16px;  color: var(--color-accent); }
+  .hero__title {
+    font-size: var(--text-display);
+    font-weight: 500;
+    max-width: 16ch;
+  }
+  .hero__tagline {
+    color: var(--color-text-muted);
+    font-size: var(--text-body-lg);
+    max-width: 42ch;
+    margin-top: 20px;
+  }
+  .hero__scroll-cue {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .hero__scroll-cue span {
+    display: block;
+    width: 1px;
+    height: 40px;
+    background: var(--color-border);
+  }
+  @media (min-width: 1024px) {
+    .hero__content { text-align: left; }
+  }
+</style>

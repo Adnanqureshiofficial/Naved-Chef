@@ -1,0 +1,36 @@
+{
+  "$ref": "#/definitions/accolades",
+  "definitions": {
+    "accolades": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "issuer": {
+          "type": "string"
+        },
+        "year": {
+          "type": "number"
+        },
+        "logo": {
+          "type": "string"
+        },
+        "link": {
+          "type": "string",
+          "format": "uri"
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "issuer",
+        "year"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

@@ -1,0 +1,84 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description = "Pastry portfolio and career profile." } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <noscript>
+  <style>.reveal { opacity: 1 !important; transform: none !important; }</style>
+</noscript>
+  </head>
+  <body>
+    <header class="site-nav">
+      <div class="container site-nav__inner">
+        <a href="/" class="site-nav__logo font-display">Naved Inamdar</a>
+        <nav class="site-nav__links">
+          <a href="/#experience">Experience</a>
+          <a href="/creations">Portfolio</a>
+          <a href="/#accolades">Accolades</a>
+          <a href="/Shaikh_Naved CV.pdf" target="_blank" class="site-nav__cta">Download CV</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container site-footer__inner">
+        <p class="eyebrow">Chef de Partie – Pastry, Taj Hotels</p>
+        <p class="site-footer__contact">
+          <a href="mailto:chef@example.com">chef@example.com</a> ·
+          <a href="tel:+919860027280">+91 98600 27280</a>
+        </p>
+        <p class="site-footer__copyright">&copy; {new Date().getFullYear()}. All rights reserved.</p>
+      </div>
+    </footer>
+<script>
+  import '../scripts/reveal.js';
+</script>
+    <style>
+      .site-nav {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        z-index: 50;
+        background: linear-gradient(to bottom, rgba(20,18,16,0.9), transparent);
+        padding-block: 20px;
+      }
+      .site-nav__inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .site-nav__logo { font-size: 22px; letter-spacing: 1px; }
+      .site-nav__links { display: flex; gap: 28px; align-items: center; font-size: var(--text-caption); text-transform: uppercase; letter-spacing: 1.5px; }
+      .site-nav__cta {
+        border: 1px solid var(--color-border);
+        padding: 8px 16px;
+        border-radius: 2px;
+        color: var(--color-accent);
+        transition: border-color 0.3s var(--ease-luxury), color 0.3s var(--ease-luxury);
+      }
+      .site-nav__cta:hover { border-color: var(--color-accent); color: var(--color-accent-hover); }
+
+      .site-footer {
+        border-top: 1px solid var(--color-border);
+        padding-block: 48px;
+        margin-top: 120px;
+      }
+      .site-footer__contact { margin-block: 12px; color: var(--color-text-muted); }
+      .site-footer__copyright { color: var(--color-text-muted); font-size: var(--text-caption); }
+    </style>
+  </body>
+</html>

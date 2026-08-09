@@ -1,0 +1,120 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allDishes = (await getCollection('dishes')).sort((a, b) => a.data.order - b.data.order);
+
+const categories = [
+  {
+    slug: 'plated-dessert',
+    label: 'Plated Dessert'
+  },
+  {
+    slug: 'cake-entremet',
+    label: 'Cake & Entremet'
+  },
+  {
+    slug: 'chocolate-showpieces',
+    label: 'Chocolate Showpieces'
+  },
+  {
+    slug: 'viennoiserie',
+    label: 'Viennoiserie'
+  }
+];
+---
+<BaseLayout title="Culinary Portfolio — [Chef Full Name]" description="Full portfolio of signature pastry creations, organized by category.">
+  <section class="creations">
+    <div class="container">
+      <p class="eyebrow">Full Portfolio</p>
+      <h1 class="font-display">Signature Creations</h1>
+
+      <div class="creations__filters" role="tablist" aria-label="Filter by category">
+        <button class="filter-btn is-active" data-filter="all" role="tab" aria-selected="true">All</button>
+        {categories.map((c) => (
+          <button class="filter-btn" data-filter={c.slug} role="tab" aria-selected="false">{c.label}</button>
+        ))}
+      </div>
+      <p class="creations__archive-hint">
+        Prefer a curated view? Browse by category:
+        {categories.map((c, i) => (
+          <>
+            {i > 0 && ' · '}
+            <a href={`/creations/${c.slug}`}>{c.label}</a>
+          </>
+        ))}
+      </p>
+
+      <div class="creations__grid" id="creations-grid">
+        {allDishes.map((dish) => (
+          <a href={`/creations/${dish.id}`} class="dish-tile card" data-category={dish.data.category}>
+            <div class="dish-tile__image">
+              <img src={dish.data.heroImage} alt={dish.data.title} loading="lazy" />
+            </div>
+            <p class="eyebrow">{categories.find((c) => c.slug === dish.data.category)?.label}</p>
+            <h3>{dish.data.title}</h3>
+          </a>
+        ))}
+      </div>
+
+      {allDishes.length === 0 && (
+        <p class="creations__empty">No dishes yet — add entries to src/content/dishes/.</p>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .creations { padding-top: 140px; padding-bottom: 100px; }
+  .creations h1 { font-size: var(--text-display); margin-top: 12px; }
+  .creations__filters { display: flex; gap: 12px; margin-top: 40px; flex-wrap: wrap; }
+  .filter-btn {
+    background: none;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    padding: 8px 18px;
+    border-radius: 2px;
+    font-size: var(--text-caption);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: all 0.3s var(--ease-luxury);
+  }
+  .filter-btn.is-active,
+  .filter-btn:hover { border-color: var(--color-accent); color: var(--color-accent); }
+  .creations__archive-hint { color: var(--color-text-muted); font-size: var(--text-caption); margin-top: 16px; }
+  .creations__archive-hint a { color: var(--color-accent); }
+  .creations__grid { display: grid; gap: 20px; margin-top: 48px; grid-template-columns: 1fr; }
+  .dish-tile { padding: 20px; }
+  .dish-tile__image { aspect-ratio: 4/5; background: var(--color-surface); margin-bottom: 16px; overflow: hidden; border-radius: var(--radius-image); }
+  .dish-tile__image img { width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
+  .dish-tile[hidden] { display: none; }
+  .creations__empty { color: var(--color-text-muted); margin-top: 40px; }
+
+  @media (min-width: 600px) {
+    .creations__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1024px) {
+    .creations__grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+
+<script>
+  // Simple client-side filter — no framework needed for this.
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+  const tiles = document.querySelectorAll<HTMLElement>('.dish-tile');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      buttons.forEach((b) => { b.classList.remove('is-active'); b.setAttribute('aria-selected', 'false'); });
+      btn.classList.add('is-active');
+      btn.setAttribute('aria-selected', 'true');
+
+      const filter = btn.dataset.filter;
+      tiles.forEach((tile) => {
+        const match = filter === 'all' || tile.dataset.category === filter;
+        tile.hidden = !match;
+      });
+    });
+  });
+</script>

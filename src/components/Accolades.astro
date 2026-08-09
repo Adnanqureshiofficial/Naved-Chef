@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+const items = (await getCollection('accolades')).sort((a, b) => b.data.year - a.data.year);
+---
+<section class="accolades" id="accolades">
+  <div class="container">
+    <p class="eyebrow">Recognition</p>
+    <h2>Accolades &amp; Press</h2>
+
+    <div class="accolades__grid">
+      {items.map((item) => (
+        <div class="accolades__item card">
+          <p class="accolades__year eyebrow">{item.data.year}</p>
+          <h3>{item.data.title}</h3>
+          <p class="accolades__issuer">{item.data.issuer}</p>
+        </div>
+      ))}
+      {items.length === 0 && (
+        <p class="accolades__empty">Add entries to src/content/accolades/ to populate this grid.</p>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .accolades { padding-block: 100px; }
+  .accolades__grid { display: grid; gap: 16px; margin-top: 48px; }
+  .accolades__item { padding: 28px; }
+  .accolades__year { margin-bottom: 12px; color: var(--color-accent); }
+  .accolades__issuer { color: var(--color-text-muted); margin-top: 8px; }
+  .accolades__empty { color: var(--color-text-muted); }
+  @media (min-width: 768px) {
+    .accolades__grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>

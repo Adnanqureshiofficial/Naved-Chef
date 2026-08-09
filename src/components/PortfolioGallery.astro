@@ -1,0 +1,173 @@
+---
+import { getCollection } from "astro:content";
+
+const allDishes = await getCollection("dishes");
+const featured = allDishes
+  .filter((d) => d.data.featured)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const categoryLabels: Record<string, string> = {
+  viennoiserie: "Viennoiserie",
+  "plated-art": "Plated Art",
+  showpieces: "Showpieces",
+};
+---
+
+<section class="portfolio-horizontal" id="portfolio">
+  <div class="container portfolio-horizontal__header">
+    <p class="eyebrow">Signature Creations</p>
+    <h2>Culinary Portfolio</h2>
+    <a href="/creations" class="portfolio-horizontal__link"
+      >View full portfolio by category →</a
+    >
+  </div>
+
+  <div class="horizontal-track-wrap">
+    <div class="horizontal-track" id="horizontal-track">
+      {
+        featured.map((dish) => (
+          <a
+            href={`/creations/${dish.id}`}
+            class="dish-card card"
+          >
+            <div class="dish-card__image">
+              <img
+                src={dish.data.heroImage}
+                alt={dish.data.title}
+                loading="lazy"
+              />
+            </div>
+            <p class="eyebrow">{categoryLabels[dish.data.category]}</p>
+            <h3>{dish.data.title}</h3>
+            <p class="dish-card__note">{dish.data.flavorNote}</p>
+          </a>
+        ))
+      }
+      {
+        featured.length === 0 && (
+          <p class="portfolio-horizontal__empty">
+            Add dishes with <code>featured: true</code> in src/content/dishes/
+            to populate this gallery.
+          </p>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .portfolio-horizontal {
+    padding-top: 100px;
+  }
+  .portfolio-horizontal__header {
+    padding-bottom: 40px;
+  }
+  .portfolio-horizontal__link {
+    display: inline-block;
+    margin-top: 16px;
+    color: var(--color-accent);
+    font-size: var(--text-caption);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+  .horizontal-track-wrap {
+    overflow: hidden;
+  }
+  .horizontal-track {
+    display: flex;
+    gap: 24px;
+    padding-inline: clamp(20px, 5vw, 64px);
+    /* Mobile: native horizontal-scroll-disabled — falls back to vertical stack via flex-wrap */
+    flex-wrap: wrap;
+  }
+  .dish-card {
+    flex: 0 0 auto;
+    width: min(320px, 80vw);
+    padding: 20px;
+  }
+  .dish-card__image {
+    aspect-ratio: 4/5;
+    background: var(--color-bg);
+    margin-bottom: 16px;
+    overflow: hidden;
+    border-radius: var(--radius-image);
+  }
+  .dish-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0;
+  }
+  .dish-card__note {
+    color: var(--color-text-muted);
+    font-size: var(--text-body);
+    margin-top: 8px;
+  }
+  .portfolio-horizontal__empty {
+    color: var(--color-text-muted);
+    padding-block: 40px;
+  }
+
+  /* Desktop/tablet: true pinned horizontal scroll, JS-driven below */
+  @media (min-width: 769px) {
+    .horizontal-track {
+      flex-wrap: nowrap;
+    }
+  }
+</style>
+
+<script>
+  // Pinned horizontal scroll — desktop/tablet only, reduced-motion respected.
+  // Lazy-initialized on first intersection so GSAP/ScrollTrigger cost is
+  // deferred until the section is actually near the viewport.
+  const section = document.getElementById("portfolio");
+  const track = document.getElementById("horizontal-track");
+
+  let initialized = false;
+
+  async function initGallery() {
+    if (initialized || !track) return;
+    initialized = true;
+
+    const { gsap, ScrollTrigger, mm } = await import("../scripts/motion.js");
+
+    mm.add(
+      {
+        isDesktop:
+          "(min-width: 769px) and (prefers-reduced-motion: no-preference)",
+      },
+      (context) => {
+        const { isDesktop } = context.conditions as { isDesktop: boolean };
+        if (!isDesktop) return;
+
+        const tween = gsap.to(track, {
+          x: () => -(track.scrollWidth - window.innerWidth + 64),
+          ease: "none",
+          scrollTrigger: {
+            trigger: section,
+            start: "top top-=210px",
+            pin: true,
+            scrub: 1,
+            invalidateOnRefresh: true,
+            end: () => "+=" + (track.scrollWidth - window.innerWidth),
+          },
+        });
+
+        return () => tween.scrollTrigger?.kill();
+      },
+    );
+  }
+
+  if (section) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          initGallery();
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" },
+    );
+    observer.observe(section);
+  }
+</script>

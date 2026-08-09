@@ -1,0 +1,115 @@
+@import '@fontsource/cormorant-garamond/300.css';
+@import '@fontsource/cormorant-garamond/400.css';
+@import '@fontsource/inter/300.css';
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+
+:root {
+  /* Color */
+  --color-bg: #141210;          /* Deep Truffle / Obsidian */
+  --color-surface: #1C1916;     /* Muted Espresso */
+  --color-text: #F9F6F0;        /* Ivory */
+  --color-text-muted: #A8A196;  /* Warm Taupe */
+  --color-accent: #D4AF37;      /* Champagne Gold */
+  --color-accent-hover: #E6C567;/* Light Gold */
+  --color-border: rgba(212, 175, 55, 0.2);
+
+  /* Type */
+  --font-display: 'Cormorant Garamond', serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* Fluid type scale — clamps between the mobile and desktop values
+     from the original spec, so we don't need per-breakpoint overrides. */
+  --text-display: clamp(38px, 4vw + 20px, 72px);
+  --text-h1: clamp(28px, 2.4vw + 16px, 48px);
+  --text-h2: clamp(22px, 1.6vw + 14px, 32px);
+  --text-h3: clamp(16px, 0.6vw + 13px, 20px);
+  --text-body-lg: clamp(15px, 0.3vw + 14px, 18px);
+  --text-body: clamp(14px, 0.15vw + 13px, 15px);
+  --text-caption: clamp(11px, 0.1vw + 10px, 12px);
+
+  --ease-luxury: cubic-bezier(0.16, 1, 0.3, 1);
+  --radius-image: 4px;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  background: var(--color-bg);
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-weight: 300;
+  line-height: 1.6;
+  font-size: var(--text-body);
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.2;
+  margin: 0;
+}
+
+h1 { font-size: var(--text-h1); }
+h2 { font-size: var(--text-h2); }
+h3 { font-size: var(--text-h3); font-weight: 500; line-height: 1.4; }
+
+.eyebrow {
+  font-size: var(--text-caption);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  border-radius: var(--radius-image);
+  display: block;
+  max-width: 100%;
+}
+
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: clamp(20px, 5vw, 64px);
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-image);
+}
+
+/* Respect reduced motion globally; GSAP timelines check this too
+   (see lib/motion.js) but this covers any CSS transitions. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s var(--ease-luxury), transform 0.9s var(--ease-luxury);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}

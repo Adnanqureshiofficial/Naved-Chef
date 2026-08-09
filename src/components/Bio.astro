@@ -1,0 +1,92 @@
+---
+
+---
+
+<section class="bio" id="bio">
+  <div class="container bio__grid">
+    <div class="bio__text">
+      <p class="eyebrow">Profile</p>
+      <h2>Biography</h2>
+      <!-- TODO: replace with real bio — career arc, training, culinary point of view -->
+      <p class="bio__paragraph">
+        Shaikh Naved Nooruddin is a Bakery & Pastry professional with over nine
+        years of experience in luxury and five-star hospitality. His career
+        began as a Bakery & Pastry Apprentice at Meluha – The Fern, Mumbai,
+        progressing through key roles at Lemon Tree Premier and Radisson Blu
+        before joining **Taj – The Trees, Mumbai** as Chef De Partie. He
+        specializes in pastry production, buffet operations, cake shop
+        management, menu planning, chocolate work, and team leadership, with an
+        approach rooted in technical precision, quality ingredients, and refined
+        presentation.
+      </p>
+      <p class="bio__stat">9 Years Crafting Luxury Pastry Experiences</p>
+    </div>
+    <div class="bio__images">
+      <div class="bio__image bio__image--main card">
+        <img src="/images/bio-main.jpg" alt="Chef portrait" />
+      </div>
+      <div class="bio__image bio__image--detail card">
+        <img src="/images/bio-detail.jpg" alt="Pastry detail shot" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .bio {
+    padding-block: 100px;
+  }
+  .bio__grid {
+    display: grid;
+    gap: 48px;
+  }
+  .bio__paragraph {
+    color: var(--color-text-muted);
+    font-size: var(--text-body-lg);
+    margin-top: 24px;
+  }
+  .bio__stat {
+    margin-top: 32px;
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    color: var(--color-accent);
+  }
+  .bio__images {
+    display: grid;
+    gap: 16px;
+  }
+  .bio__image {
+    aspect-ratio: 4/5;
+    background: var(--color-surface);
+    overflow: hidden;
+  }
+  .bio__image--detail {
+    aspect-ratio: 16/9;
+  }
+  .bio__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0;
+  }
+
+  @media (min-width: 768px) {
+    .bio__grid {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+  }
+  @media (min-width: 1024px) {
+    .bio__grid {
+      grid-template-columns: 5fr 7fr;
+      gap: 64px;
+    }
+    .bio__images {
+      grid-template-columns: 1fr 1fr;
+      align-items: end;
+    }
+    .bio__image--main {
+      grid-row: span 2;
+    }
+  }
+</style>
