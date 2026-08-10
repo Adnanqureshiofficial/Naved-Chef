@@ -68,5 +68,28 @@ function formatRange(start: string, end: string | undefined, current: boolean) {
 
   @media (min-width: 768px) {
     .timeline { margin-left: 4px; }
-  }
+
+   
+     
+     }
+
+     @media (max-width: 768px) {
+   
+
+    .timeline__body { 
+    overflow-y: scroll;
+    height: 300px;
+    scrollbar-width: auto;
+     }
+     
+     }
+
+
+      @media (max-width: 578px) {
+.timeline__body { 
+    overflow-y: scroll;
+    height: 250px;
+    scrollbar-width: none;
+     }
+      }
 </style>

@@ -3,7 +3,11 @@ title: "White Chocolate Yogurt Panna Cotta"
 category: "plated-dessert"
 flavorNote: "Silky white chocolate panna cotta balanced with the freshness of cultured yogurt"
 heroImage: "/images/dishes/plated-dessert/white-chocolate-yogurt-panna-cotta-hero.jpeg"
-gallery: []
+gallery: [
+    "/images/dishes/plated-dessert/yogurt-panacota-2.jpeg",
+"/images/dishes/plated-dessert/yogurt-panacota-1.jpeg",
+"/images/dishes/plated-dessert/yogurt-panacota-3.jpeg"
+]
 year: 2024
 featured: true
 order: 1

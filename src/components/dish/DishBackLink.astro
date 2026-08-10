@@ -1,0 +1,48 @@
+---
+interface Props {
+  href?: string;
+  label?: string;
+}
+
+const {
+  href = '/creations',
+  label = 'All creations',
+} = Astro.props;
+---
+
+<a class="dish-back" href={href}>
+  <span class="dish-back__arrow">←</span>
+  <span>{label}</span>
+</a>
+
+<style>
+  .dish-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+
+    margin-bottom: 2rem;
+
+    color: inherit;
+    text-decoration: none;
+
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+
+    opacity: 0.6;
+
+    transition:
+      opacity 250ms ease,
+      gap 250ms ease;
+  }
+
+  .dish-back:hover {
+    opacity: 1;
+    gap: 1rem;
+  }
+
+  .dish-back__arrow {
+    font-size: 1rem;
+  }
+</style>

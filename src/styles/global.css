@@ -5,30 +5,32 @@
 @import '@fontsource/inter/500.css';
 
 :root {
-  /* Color */
-  --color-bg: #141210;          /* Deep Truffle / Obsidian */
-  --color-surface: #1C1916;     /* Muted Espresso */
-  --color-text: #F9F6F0;        /* Ivory */
-  --color-text-muted: #A8A196;  /* Warm Taupe */
-  --color-accent: #D4AF37;      /* Champagne Gold */
-  --color-accent-hover: #E6C567;/* Light Gold */
-  --color-border: rgba(212, 175, 55, 0.2);
+  --color-bg: #141210;
+  --color-surface: #1C1916;
+  --color-text: #F9F6F0;
+  --color-text-muted: #A8A196;
 
-  /* Type */
+  --color-accent: #C8A96B;
+  --color-accent-hover: #D8BD87;
+  --color-border: rgba(249, 246, 240, 0.10);
+
   --font-display: 'Cormorant Garamond', serif;
   --font-body: 'Inter', sans-serif;
 
-  /* Fluid type scale — clamps between the mobile and desktop values
-     from the original spec, so we don't need per-breakpoint overrides. */
+  --navbar-height: 70px;
+
+  /* Responsive typography */
   --text-display: clamp(38px, 4vw + 20px, 72px);
   --text-h1: clamp(28px, 2.4vw + 16px, 48px);
   --text-h2: clamp(22px, 1.6vw + 14px, 32px);
   --text-h3: clamp(16px, 0.6vw + 13px, 20px);
+
   --text-body-lg: clamp(15px, 0.3vw + 14px, 18px);
   --text-body: clamp(14px, 0.15vw + 13px, 15px);
   --text-caption: clamp(11px, 0.1vw + 10px, 12px);
 
   --ease-luxury: cubic-bezier(0.16, 1, 0.3, 1);
+
   --radius-image: 4px;
 }
 
@@ -90,6 +92,10 @@ img {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-image);
+}
+
+.page-main {
+  padding-top: var(--navbar-height);
 }
 
 /* Respect reduced motion globally; GSAP timelines check this too

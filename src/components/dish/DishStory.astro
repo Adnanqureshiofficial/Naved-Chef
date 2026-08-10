@@ -1,0 +1,123 @@
+---
+const { Content } = Astro.props;
+---
+
+<section class="dish-story">
+
+  <div class="dish-story__intro">
+
+    <span class="dish-story__label">
+      The creation
+    </span>
+
+    <div class="dish-story__rule"></div>
+
+  </div>
+
+  <article class="dish-story__content">
+    <Content />
+  </article>
+
+</section>
+
+<style>
+  .dish-story {
+    width: min(100% - 3rem, 1100px);
+    margin: 0 auto 10rem;
+  }
+
+  .dish-story__intro {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+  }
+
+  .dish-story__label {
+    flex: 0 0 auto;
+
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    opacity: 0.55;
+  }
+
+  .dish-story__rule {
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.15;
+  }
+
+  .dish-story__content {
+    width: min(100%, 820px);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .dish-story__content :global(h2) {
+    margin: 5.5rem 0 1.5rem;
+
+    font-family: var(--font-display, serif);
+    font-size: clamp(2.2rem, 4vw, 3.8rem);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .dish-story__content :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .dish-story__content :global(p) {
+    max-width: 720px;
+    margin: 0 0 1.5rem;
+
+    font-size: clamp(1rem, 1.2vw, 1.12rem);
+    line-height: 1.9;
+    opacity: 0.78;
+  }
+
+  .dish-story__content :global(h2 + p) {
+    font-size: clamp(1.12rem, 1.5vw, 1.35rem);
+    line-height: 1.75;
+    opacity: 0.9;
+  }
+
+  .dish-story__content :global(ul) {
+    margin: 1.5rem 0;
+    padding-left: 1.3rem;
+  }
+
+  .dish-story__content :global(li) {
+    margin-bottom: 0.65rem;
+    line-height: 1.7;
+    opacity: 0.8;
+  }
+
+  @media (max-width: 700px) {
+    .dish-story {
+      width: calc(100% - 2rem);
+      margin-bottom: 6rem;
+    }
+
+    .dish-story__intro {
+      margin-bottom: 2.5rem;
+    }
+
+    .dish-story__content :global(h2) {
+      margin-top: 4rem;
+      font-size: 2.4rem;
+    }
+
+    .dish-story__content :global(p) {
+      font-size: 0.98rem;
+      line-height: 1.8;
+    }
+
+    .dish-story__content :global(h2 + p) {
+      font-size: 1.08rem;
+      line-height: 1.7;
+    }
+  }
+</style>

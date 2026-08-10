@@ -3,76 +3,449 @@
 ---
 <section class="hero" id="hero">
   <div class="hero__bg" aria-hidden="true" id="hero-bg">
-    <img src="/images/hero.jpg" alt="" />
+    <img
+      src="/images/hero.png"
+      alt=""
+    />
   </div>
+
   <div class="hero__scrim" aria-hidden="true"></div>
+
   <div class="container hero__content">
-    <p class="eyebrow hero__badge" id="hero-badge">Chef de Partie – Pastry & Bakery, Taj Hotels</p>
-    <h1 class="hero__title font-display" id="hero-title">SHAIKH NAVED</h1>
-    <p class="hero__tagline" id="hero-tagline">Experienced Bakery & Pastry professional with over 9 years of progressive experience in luxury and
-five-star hotel kitchens. Expertise in pastry production, buffet operations, cake shop management, team
-supervision, menu planning, SAP ordering, and audit compliance</p>
+
+    <p
+      class="eyebrow hero__badge"
+      id="hero-badge"
+    >
+      Chef de Partie – Pastry & Bakery, Taj Hotels
+    </p>
+
+    <h1
+      class="hero__title font-display"
+      id="hero-title"
+    >
+      SHAIKH NAVED
+    </h1>
+
+    <p
+      class="hero__tagline"
+      id="hero-tagline"
+    >
+      Experienced Bakery & Pastry professional with over 9 years of
+      progressive experience in luxury and five-star hotel kitchens.
+      Expertise in pastry production, buffet operations, cake shop
+      management, team supervision, menu planning, SAP ordering,
+      and audit compliance.
+    </p>
+
   </div>
+
   <div class="hero__scroll-cue" aria-hidden="true">
     <span></span>
   </div>
 </section>
 
 <style>
+  /* =====================================================
+     HERO
+     ===================================================== */
+
   .hero {
     position: relative;
+
     min-height: 100svh;
+
     display: flex;
     align-items: flex-end;
+
     overflow: hidden;
+
+    isolation: isolate;
   }
+
+
+  /* =====================================================
+     BACKGROUND IMAGE
+     ===================================================== */
+
   .hero__bg {
     position: absolute;
+
     inset: 0;
+
+    z-index: -2;
 
     background: var(--color-surface);
   }
+
+
   .hero__bg img {
+    display: block;
+
     width: 100%;
     height: 100%;
+
+    max-width: none;
+
     object-fit: cover;
-object-position: top;
+
+    /*
+     * Chef is positioned toward the right side
+     * of the source landscape image.
+     */
+    object-position: 72% center;
+
     border-radius: 0;
   }
+
+
+  /* =====================================================
+     HERO SCRIM
+     ===================================================== */
+
   .hero__scrim {
     position: absolute;
+
     inset: 0;
-    background: linear-gradient(to top, var(--color-bg) 5%, rgba(20,18,16,0.2) 60%);
+
+    z-index: -1;
+
+    pointer-events: none;
+
+    /*
+     * Keep the image visible.
+     * Darker toward the bottom for typography.
+     */
+    background:
+      linear-gradient(
+        to top,
+        rgba(20, 18, 16, 0.94) 0%,
+        rgba(20, 18, 16, 0.60) 24%,
+        rgba(20, 18, 16, 0.16) 58%,
+        rgba(20, 18, 16, 0.05) 100%
+      );
   }
+
+
+  /* =====================================================
+     HERO CONTENT
+     ===================================================== */
+
   .hero__content {
     position: relative;
-    padding-bottom: clamp(48px, 8vh, 100px);
+
+    z-index: 2;
+
+    width: 100%;
+
+    padding-top: 100px;
+
+    padding-bottom:
+      clamp(64px, 9vh, 110px);
   }
-  .hero__badge { margin-bottom: 16px;  color: var(--color-accent); }
+
+
+  /* =====================================================
+     BADGE
+     ===================================================== */
+
+  .hero__badge {
+    width: fit-content;
+
+    margin: 0 0 16px;
+
+    padding: 5px 11px;
+
+    border-radius: 12px;
+
+    background: rgba(200, 169, 107, 0.62);
+
+    color: #fff;
+
+    font-size: var(--text-caption);
+    font-weight: 400;
+
+    letter-spacing: 1.4px;
+
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+  }
+
+
+  /* =====================================================
+     TITLE
+     ===================================================== */
+
   .hero__title {
-    font-size: var(--text-display);
-    font-weight: 500;
     max-width: 16ch;
+
+    margin: 0;
+
+    color: var(--color-text);
+
+    font-size: var(--text-display);
+
+    font-weight: 500;
+
+    line-height: 0.95;
+
+    letter-spacing: -0.02em;
+
+    text-wrap: balance;
   }
+
+
+  /* =====================================================
+     TAGLINE
+     ===================================================== */
+
   .hero__tagline {
-    color: var(--color-text-muted);
-    font-size: var(--text-body-lg);
     max-width: 42ch;
-    margin-top: 20px;
+
+    margin: 20px 0 0;
+
+    color: rgba(249, 246, 240, 0.78);
+
+    font-size: var(--text-body-lg);
+
+    line-height: 1.65;
+
+    text-wrap: pretty;
   }
+
+
+  /* =====================================================
+     SCROLL CUE
+     ===================================================== */
+
   .hero__scroll-cue {
     position: absolute;
+
     bottom: 24px;
     left: 50%;
+
+    z-index: 3;
+
     transform: translateX(-50%);
   }
+
+
   .hero__scroll-cue span {
     display: block;
+
     width: 1px;
     height: 40px;
-    background: var(--color-border);
+
+    background: rgba(212, 175, 55, 0.45);
   }
-  @media (min-width: 1024px) {
-    .hero__content { text-align: left; }
+
+
+  /* =====================================================
+     TABLET
+     ===================================================== */
+
+  @media (max-width: 900px) {
+
+    .hero__bg img {
+      /*
+       * Move the focal point slightly further right
+       * as the viewport becomes narrower.
+       */
+      object-position: 76% center;
+    }
+
+    .hero__content {
+      padding-bottom: 76px;
+    }
+
+  }
+
+
+  /* =====================================================
+     MOBILE
+     ===================================================== */
+
+  @media (max-width: 768px) {
+
+    .hero {
+      min-height: 100svh;
+
+      /*
+       * Prevent excessive horizontal composition issues.
+       */
+      width: 100%;
+    }
+
+
+    .hero__bg img {
+      /*
+       * IMPORTANT:
+       * Chef is on the right side of the original image.
+       * Portrait `cover` crops the horizontal edges,
+       * therefore move the focal point right.
+       */
+      object-position: 78% center;
+    }
+
+
+    /*
+     * Remove the long description on mobile.
+     *
+     * This gives the photograph much more visual presence.
+     */
+    .hero__tagline {
+      display: none;
+    }
+
+
+    .hero__content {
+      padding-top: 90px;
+
+      padding-bottom:
+        clamp(70px, 10vh, 90px);
+
+      text-align: left;
+    }
+
+
+    .hero__badge {
+      margin-bottom: 14px;
+
+      max-width: calc(100vw - 40px);
+
+      line-height: 1.4;
+    }
+
+
+    .hero__title {
+      max-width: 9ch;
+
+      font-size:
+        clamp(48px, 14vw, 72px);
+
+      line-height: 0.92;
+    }
+
+
+    /*
+     * Slightly stronger bottom scrim because
+     * the title sits directly over the photograph.
+     */
+    .hero__scrim {
+      background:
+        linear-gradient(
+          to top,
+          rgba(20, 18, 16, 0.94) 0%,
+          rgba(20, 18, 16, 0.64) 25%,
+          rgba(20, 18, 16, 0.18) 58%,
+          rgba(20, 18, 16, 0.03) 100%
+        );
+    }
+
+
+    .hero__scroll-cue {
+      bottom: 18px;
+    }
+
+
+    .hero__scroll-cue span {
+      height: 30px;
+    }
+  }
+
+
+  /* =====================================================
+     SMALL PHONES
+     ===================================================== */
+
+  @media (max-width: 480px) {
+
+    .hero__bg img {
+      /*
+       * Narrower viewport = stronger right focal point.
+       */
+      object-position: 80% center;
+    }
+
+
+    .hero__content {
+      padding-top: 84px;
+
+      padding-bottom: 68px;
+    }
+
+
+    .hero__badge {
+      padding: 4px 9px;
+
+      font-size: 10px;
+
+      letter-spacing: 1.1px;
+    }
+
+
+    .hero__title {
+      max-width: 8ch;
+
+      font-size:
+        clamp(46px, 15vw, 64px);
+    }
+
+
+    .hero__scrim {
+      background:
+        linear-gradient(
+          to top,
+          rgba(20, 18, 16, 0.96) 0%,
+          rgba(20, 18, 16, 0.68) 26%,
+          rgba(20, 18, 16, 0.16) 60%,
+          rgba(20, 18, 16, 0.02) 100%
+        );
+    }
+  }
+
+
+  /* =====================================================
+     VERY SMALL PHONES
+     ===================================================== */
+
+  @media (max-width: 360px) {
+
+    .hero__bg img {
+      object-position: 82% center;
+    }
+
+
+    .hero__content {
+      padding-bottom: 64px;
+    }
+
+
+    .hero__title {
+      font-size: 45px;
+    }
+  }
+
+
+  /* =====================================================
+     LANDSCAPE MOBILE
+     ===================================================== */
+
+  @media (max-height: 600px) and (max-width: 900px) {
+
+    .hero__content {
+      padding-top: 84px;
+      padding-bottom: 48px;
+    }
+
+
+    .hero__title {
+      font-size: clamp(42px, 8vw, 62px);
+    }
+
+
+    .hero__scroll-cue {
+      display: none;
+    }
   }
 </style>

@@ -1,69 +1,146 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+
+import DishHero from '../../components/dish/DishHero.astro';
+import DishStory from '../../components/dish/DishStory.astro';
+import DishGallery from '../../components/dish/DishGallery.astro';
+import DishNavigation from '../../components/dish/DishNavigation.astro';
+import DishBackLink from '../../components/dish/DishBackLink.astro';
+
 import { getCollection, render } from 'astro:content';
 
+const categoryLabels: Record<string, string> = {
+  'plated-dessert': 'Plated Dessert',
+  'cake-entremet': 'Cake & Entremet',
+  'chocolate-showpieces': 'Chocolate Showpieces',
+  'viennoiserie': 'Viennoiserie',
+};
+
 export async function getStaticPaths() {
-  const allDishes = await getCollection('dishes');
-  return allDishes.map((dish) => ({
-    params: { category: dish.data.category, dish: dish.id },
-    props: { dish },
+  const dishes = await getCollection('dishes');
+
+  return dishes.map((dish) => ({
+    params: {
+      dish: dish.id,
+    },
+    props: {
+      dish,
+    },
   }));
 }
 
 const { dish } = Astro.props;
+
 const { Content } = await render(dish);
 
-const categoryLabels: Record<string, string> = {
-  'viennoiserie': 'Viennoiserie',
-  'plated-dessert': 'Plated Art',
-  'showpieces': 'Showpieces',
-};
+const categoryLabel =
+  categoryLabels[dish.data.category] ?? dish.data.category;
+
+
+/*
+ * Find previous / next creation
+ * within the same category.
+ */
+const allDishes = await getCollection('dishes');
+
+const categoryDishes = allDishes
+  .filter(
+    (item) =>
+      item.data.category === dish.data.category
+  )
+  .sort(
+    (a, b) =>
+      a.data.order - b.data.order
+  );
+
+const currentIndex = categoryDishes.findIndex(
+  (item) => item.id === dish.id
+);
+
+const previousDish =
+  categoryDishes.length > 1
+    ? categoryDishes[
+        currentIndex > 0
+          ? currentIndex - 1
+          : categoryDishes.length - 1
+      ]
+    : undefined;
+
+const nextDish =
+  categoryDishes.length > 1
+    ? categoryDishes[
+        currentIndex < categoryDishes.length - 1
+          ? currentIndex + 1
+          : 0
+      ]
+    : undefined;
 ---
+
 <BaseLayout
-  title={`${dish.data.title} — ${categoryLabels[dish.data.category]}`}
+  title={`${dish.data.title} — ${categoryLabel}`}
   description={dish.data.flavorNote}
 >
-  <article class="dish">
-    <div class="container">
-      <a href={`/creations/${dish.data.category}`} class="dish__back">← {categoryLabels[dish.data.category]}</a>
 
-      <div class="dish__hero card">
-        <img src={dish.data.heroImage} alt={dish.data.title} />
-      </div>
+  <main class="dish-page">
 
-      <div class="dish__header">
-        <p class="eyebrow">{categoryLabels[dish.data.category]}{dish.data.year ? ` · ${dish.data.year}` : ''}</p>
-        <h1 class="font-display">{dish.data.title}</h1>
-        <p class="dish__note">{dish.data.flavorNote}</p>
-      </div>
+    <DishBackLink />
 
-      <div class="dish__body">
-        <Content />
-      </div>
+    <DishHero
+      title={dish.data.title}
+      category={categoryLabel}
+      flavorNote={dish.data.flavorNote}
+      heroImage={dish.data.heroImage}
+      year={dish.data.year}
+    />
 
-      {dish.data.gallery.length > 0 && (
-        <div class="dish__gallery">
-          {dish.data.gallery.map((src) => (
-            <div class="dish__gallery-image card">
-              <img src={src} alt={`${dish.data.title} — process detail`} loading="lazy" />
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  </article>
+    <DishStory Content={Content} />
+
+    {dish.data.gallery.length > 0 && (
+      <DishGallery
+        images={dish.data.gallery}
+        title={dish.data.title}
+      />
+    )}
+
+    <DishNavigation
+      previous={
+        previousDish
+          ? {
+              id: previousDish.id,
+              title: previousDish.data.title,
+              image: previousDish.data.heroImage,
+            }
+          : undefined
+      }
+      next={
+        nextDish
+          ? {
+              id: nextDish.id,
+              title: nextDish.data.title,
+              image: nextDish.data.heroImage,
+            }
+          : undefined
+      }
+    />
+
+  </main>
+
 </BaseLayout>
 
 <style>
-  .dish { padding-top: 140px; padding-bottom: 100px; }
-  .dish__back { color: var(--color-text-muted); font-size: var(--text-caption); text-transform: uppercase; letter-spacing: 1.5px; }
-  .dish__hero { aspect-ratio: 16/9; background: var(--color-surface); margin-top: 24px; overflow: hidden; }
-  .dish__hero img { width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
-  .dish__header { margin-top: 32px; max-width: 60ch; }
-  .dish__header h1 { font-size: var(--text-display); margin-top: 12px; }
-  .dish__note { color: var(--color-text-muted); font-size: var(--text-body-lg); margin-top: 16px; }
-  .dish__body { max-width: 60ch; margin-top: 32px; color: var(--color-text-muted); font-size: var(--text-body-lg); }
-  .dish__gallery { display: grid; gap: 16px; margin-top: 48px; grid-template-columns: repeat(2, 1fr); }
-  .dish__gallery-image { aspect-ratio: 4/3; background: var(--color-surface); overflow: hidden; }
-  .dish__gallery-image img { width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
+  .dish-page {
+    width: min(100%, 1600px);
+    margin: 0 auto;
+    padding: 2rem clamp(1rem, 3vw, 3rem) 0;
+  }
+
+  @media (max-width: 700px) {
+    .dish-page {
+      padding: 1rem 0 0;
+    }
+
+    .dish-page > :global(.dish-back) {
+      margin-left: 1rem;
+    }
+  }
 </style>

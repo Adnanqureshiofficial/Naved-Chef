@@ -1,0 +1,515 @@
+---
+interface Props {
+  previous?: {
+    id: string;
+    title: string;
+    image?: string;
+  };
+
+  next?: {
+    id: string;
+    title: string;
+    image?: string;
+  };
+}
+
+const { previous, next } = Astro.props;
+---
+
+<nav class="dish-navigation" aria-label="Dish navigation">
+
+  {previous && (
+    <a
+      href={previous.href}
+      class="dish-navigation__item dish-navigation__item--previous"
+    >
+      {previous.image && (
+        <img
+          src={previous.image}
+          alt=""
+          loading="lazy"
+          class="dish-navigation__image"
+        />
+      )}
+
+      <div class="dish-navigation__content">
+
+        <span class="dish-navigation__label">
+          <span class="dish-navigation__arrow">←</span>
+          Previous creation
+        </span>
+
+        <h2 class="dish-navigation__title">
+          {previous.title}
+        </h2>
+
+      </div>
+    </a>
+  )}
+
+  {next && (
+    <a
+      href={next.href}
+      class="dish-navigation__item dish-navigation__item--next"
+    >
+      {next.image && (
+        <img
+          src={next.image}
+          alt=""
+          loading="lazy"
+          class="dish-navigation__image"
+        />
+      )}
+
+      <div class="dish-navigation__content">
+
+        <span class="dish-navigation__label">
+          Next creation
+          <span class="dish-navigation__arrow">→</span>
+        </span>
+
+        <h2 class="dish-navigation__title">
+          {next.title}
+        </h2>
+
+      </div>
+    </a>
+  )}
+
+</nav>
+
+<style>
+/* =========================================================
+   DISH NAVIGATION
+   ========================================================= */
+
+.dish-navigation {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  /*
+   * Always side-by-side.
+   * The gap scales down with the viewport.
+   */
+  gap: clamp(10px, 2vw, 24px);
+
+  margin-top: clamp(64px, 9vw, 128px);
+}
+
+
+/* =========================================================
+   NAVIGATION ITEM
+   ========================================================= */
+
+.dish-navigation__item {
+  position: relative;
+
+  min-height: clamp(
+    220px,
+    25vw,
+    340px
+  );
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  padding: clamp(
+    20px,
+    3.2vw,
+    46px
+  );
+
+  overflow: hidden;
+
+  isolation: isolate;
+
+  color: var(--color-text);
+
+  background: var(--color-surface);
+
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-image);
+
+  transition:
+    border-color 450ms var(--ease-luxury);
+}
+
+
+/* =========================================================
+   IMAGE
+   ========================================================= */
+
+.dish-navigation__image {
+  position: absolute;
+  inset: 0;
+
+  z-index: -2;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  border-radius: 0;
+
+  opacity: 0.42;
+
+  transform: scale(1.02);
+
+  transition:
+    opacity 650ms var(--ease-luxury),
+    transform 1000ms var(--ease-luxury);
+}
+
+
+/* =========================================================
+   DARK IMAGE OVERLAY
+   ========================================================= */
+
+.dish-navigation__item::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  z-index: -1;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(20, 18, 16, 0.22) 0%,
+      rgba(20, 18, 16, 0.42) 42%,
+      rgba(20, 18, 16, 0.82) 100%
+    );
+}
+
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.dish-navigation__content {
+  position: relative;
+  z-index: 2;
+
+  max-width: 90%;
+}
+
+
+/* =========================================================
+   PREVIOUS / NEXT ALIGNMENT
+   ========================================================= */
+
+.dish-navigation__item--previous {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.dish-navigation__item--next {
+  align-items: flex-end;
+  text-align: right;
+}
+
+
+/* =========================================================
+   LABEL
+   ========================================================= */
+
+.dish-navigation__label {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  margin-bottom: 12px;
+
+  color: var(--color-accent);
+
+  font-family: var(--font-body);
+
+  font-size: var(--text-caption);
+  font-weight: 500;
+
+  line-height: 1.4;
+
+  text-transform: uppercase;
+  letter-spacing: 1.8px;
+
+  text-shadow:
+    0 2px 16px rgba(0, 0, 0, 0.4);
+}
+
+
+/* =========================================================
+   ARROW
+   ========================================================= */
+
+.dish-navigation__arrow {
+  font-size: 16px;
+
+  line-height: 1;
+
+  transition:
+    transform 500ms var(--ease-luxury);
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.dish-navigation__title {
+  margin: 0;
+
+  color: var(--color-text);
+
+  font-family: var(--font-display);
+
+  font-size: clamp(
+    1.7rem,
+    3vw,
+    3rem
+  );
+
+  font-weight: 300;
+
+  line-height: 0.98;
+
+  letter-spacing: -0.025em;
+
+  text-wrap: balance;
+
+  text-shadow:
+    0 3px 22px rgba(0, 0, 0, 0.42);
+}
+
+
+/* =========================================================
+   HOVER
+   ========================================================= */
+
+@media (hover: hover) and (pointer: fine) {
+
+  .dish-navigation__item:hover {
+    border-color: rgba(200, 169, 107, 0.35);
+  }
+
+  .dish-navigation__item:hover .dish-navigation__image {
+    opacity: 0.9;
+
+    transform: scale(1.06);
+  }
+
+  .dish-navigation__item--previous:hover
+  .dish-navigation__arrow {
+    transform: translateX(-5px);
+  }
+
+  .dish-navigation__item--next:hover
+  .dish-navigation__arrow {
+    transform: translateX(5px);
+  }
+
+}
+
+
+/* =========================================================
+   LARGE TABLETS
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+  .dish-navigation {
+    gap: 16px;
+  }
+
+  .dish-navigation__item {
+    min-height: 260px;
+
+    padding: 30px;
+  }
+
+  .dish-navigation__title {
+    font-size: clamp(
+      1.6rem,
+      3.2vw,
+      2.5rem
+    );
+  }
+
+}
+
+
+/* =========================================================
+   TABLETS
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  .dish-navigation {
+    gap: 12px;
+
+    margin-top: 80px;
+  }
+
+  .dish-navigation__item {
+    min-height: 220px;
+
+    padding: 24px;
+  }
+
+  .dish-navigation__image {
+    opacity: 0.4;
+  }
+
+  .dish-navigation__item::after {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(20, 18, 16, 0.28) 0%,
+        rgba(20, 18, 16, 0.48) 38%,
+        rgba(20, 18, 16, 0.86) 100%
+      );
+  }
+
+  .dish-navigation__label {
+    gap: 6px;
+
+    margin-bottom: 9px;
+
+    font-size: 10px;
+
+    letter-spacing: 1.5px;
+  }
+
+  .dish-navigation__arrow {
+    font-size: 14px;
+  }
+
+  .dish-navigation__title {
+    font-size: clamp(
+      1.45rem,
+      4vw,
+      2rem
+    );
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  /*
+   * IMPORTANT:
+   * We deliberately keep the two columns.
+   */
+  .dish-navigation {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+
+    margin-top: 64px;
+  }
+
+  .dish-navigation__item {
+    min-height: 185px;
+
+    padding: 18px;
+  }
+
+  .dish-navigation__content {
+    max-width: 100%;
+  }
+
+  .dish-navigation__label {
+    margin-bottom: 8px;
+
+    font-size: 9px;
+
+    letter-spacing: 1.25px;
+  }
+
+  .dish-navigation__arrow {
+    font-size: 13px;
+  }
+
+  .dish-navigation__title {
+    font-size: clamp(
+      1.25rem,
+      5vw,
+      1.7rem
+    );
+
+    line-height: 1;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 400px) {
+
+  .dish-navigation {
+    gap: 8px;
+
+    margin-top: 54px;
+  }
+
+  .dish-navigation__item {
+    min-height: 165px;
+
+    padding: 15px;
+  }
+
+  .dish-navigation__label {
+    font-size: 8px;
+
+    letter-spacing: 1px;
+  }
+
+  .dish-navigation__title {
+    font-size: clamp(
+      1.15rem,
+      5.2vw,
+      1.45rem
+    );
+  }
+
+}
+
+
+/* =========================================================
+   VERY SMALL DEVICES
+   ========================================================= */
+
+@media (max-width: 340px) {
+
+  .dish-navigation {
+    gap: 6px;
+  }
+
+  .dish-navigation__item {
+    min-height: 150px;
+
+    padding: 12px;
+  }
+
+  .dish-navigation__title {
+    font-size: 1.1rem;
+  }
+
+}
+
+</style>

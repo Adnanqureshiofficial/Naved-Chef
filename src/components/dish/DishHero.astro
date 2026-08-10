@@ -1,0 +1,808 @@
+---
+interface Props {
+  title: string;
+  category: string;
+  flavorNote: string;
+  heroImage: string;
+  year?: number;
+}
+
+const {
+  title,
+  category,
+  flavorNote,
+  heroImage,
+  year,
+} = Astro.props;
+---
+
+<section class="dish-hero">
+  <div class="dish-hero__media">
+    <img
+      src={heroImage}
+      alt={title}
+      class="dish-hero__image"
+    />
+
+    <div class="dish-hero__veil"></div>
+  </div>
+
+  <div class="dish-hero__content">
+    <p class="dish-hero__meta">
+      {category}{year ? ` · ${year}` : ''}
+    </p>
+
+    <h1 class="dish-hero__title">
+      {title}
+    </h1>
+
+    <p class="dish-hero__note">
+      {flavorNote}
+    </p>
+
+    <div class="dish-hero__scroll">
+      <span class="dish-hero__scroll-line"></span>
+      <span>Scroll to explore</span>
+    </div>
+  </div>
+</section>
+<style>
+
+  /* =========================================================
+   DISH HERO
+   ========================================================= */
+
+.dish-hero {
+  position: relative;
+
+  /*
+   * Editorial width:
+   * approximately 90% of the viewport on desktop.
+   */
+  width: min(90vw, 1440px);
+
+  /*
+   * Around 70vh, but safely constrained.
+   */
+  height: clamp(
+    560px,
+    70vh,
+    820px
+  );
+
+  min-height: 0;
+
+  margin-inline: auto;
+
+  overflow: hidden;
+
+  background: var(--color-bg);
+
+  border-radius: 4px;
+}
+
+
+/* =========================================================
+   HERO MEDIA
+   ========================================================= */
+
+.dish-hero__media {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+}
+
+
+.dish-hero__image {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+  object-position: center center;
+
+  border-radius: 0;
+
+  transform: scale(1.01);
+
+  transition:
+    transform 1.2s var(--ease-luxury);
+}
+
+
+/* =========================================================
+   CINEMATIC OVERLAY
+   ========================================================= */
+
+.dish-hero__veil {
+  position: absolute;
+  inset: 0;
+
+  z-index: 1;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(20, 18, 16, 0.03) 0%,
+      rgba(20, 18, 16, 0.06) 24%,
+      rgba(20, 18, 16, 0.20) 44%,
+      rgba(20, 18, 16, 0.58) 69%,
+      rgba(20, 18, 16, 0.94) 100%
+    );
+}
+
+
+.dish-hero__media::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  z-index: 2;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(20, 18, 16, 0.22) 0%,
+      rgba(20, 18, 16, 0.08) 30%,
+      transparent 62%
+    );
+}
+
+
+/* =========================================================
+   HERO CONTENT
+   ========================================================= */
+
+.dish-hero__content {
+  position: relative;
+  z-index: 3;
+
+  width: 100%;
+  height: 100%;
+
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: flex-end;
+  align-items: flex-start;
+
+  text-align: left;
+
+  padding:
+    clamp(60px, 8vh, 100px)
+    clamp(28px, 5vw, 72px)
+    clamp(40px, 7vh, 80px);
+}
+
+
+/* =========================================================
+   META
+   ========================================================= */
+
+.dish-hero__meta {
+  margin: 0 0 18px;
+
+  color: var(--color-accent);
+
+  font-family: var(--font-body);
+
+  font-size: var(--text-caption);
+
+  font-weight: 500;
+
+  line-height: 1.4;
+
+  text-transform: uppercase;
+
+  letter-spacing: 2.5px;
+
+  text-shadow:
+    0 2px 16px rgba(0, 0, 0, 0.45);
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.dish-hero__title {
+  max-width: 1000px;
+
+  margin: 0;
+
+  color: var(--color-text);
+
+  font-family: var(--font-display);
+
+  font-size: clamp(
+    4rem,
+    7vw,
+    8rem
+  );
+
+  font-weight: 300;
+
+  line-height: 0.88;
+
+  letter-spacing: -0.045em;
+
+  text-align: left;
+
+  text-wrap: balance;
+
+  text-shadow:
+    0 3px 24px rgba(0, 0, 0, 0.45);
+}
+
+
+/* =========================================================
+   FLAVOR NOTE
+   ========================================================= */
+
+.dish-hero__note {
+  max-width: 620px;
+
+  margin:
+    clamp(20px, 2.5vw, 32px)
+    0
+    0;
+
+  color: var(--color-text);
+
+  font-family: var(--font-body);
+
+  font-size: var(--text-body-lg);
+
+  font-weight: 300;
+
+  line-height: 1.6;
+
+  text-align: left;
+
+  opacity: 0.88;
+
+  text-shadow:
+    0 2px 18px rgba(0, 0, 0, 0.48);
+}
+
+
+/* =========================================================
+   SCROLL INDICATOR
+   ========================================================= */
+
+.dish-hero__scroll {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-top: 38px;
+
+  color: var(--color-text-muted);
+
+  font-family: var(--font-body);
+
+  font-size: var(--text-caption);
+
+  font-weight: 400;
+
+  line-height: 1.4;
+
+  text-transform: uppercase;
+
+  letter-spacing: 1.8px;
+}
+
+
+.dish-hero__scroll-line {
+  display: block;
+
+  width: 42px;
+  height: 1px;
+
+  flex: 0 0 auto;
+
+  background: var(--color-accent);
+
+  opacity: 0.85;
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+   ========================================================= */
+
+@media (min-width: 1400px) {
+
+  .dish-hero {
+    width: min(90vw, 1440px);
+
+    height: clamp(
+      600px,
+      70vh,
+      820px
+    );
+  }
+
+}
+
+
+/* =========================================================
+   DESKTOP / LAPTOP
+   ========================================================= */
+
+@media (min-width: 769px) and (max-width: 1399px) {
+
+  .dish-hero {
+    width: 90vw;
+
+    height: clamp(
+      540px,
+      70vh,
+      760px
+    );
+  }
+
+
+  .dish-hero__content {
+    padding:
+      clamp(50px, 7vh, 80px)
+      clamp(28px, 5vw, 64px)
+      clamp(36px, 6vh, 68px);
+  }
+
+
+  .dish-hero__title {
+    max-width: 850px;
+
+    font-size: clamp(
+      3.8rem,
+      7vw,
+      7rem
+    );
+  }
+
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  .dish-hero {
+    /*
+     * 20px breathing room on both sides.
+     */
+    width: calc(100% - 40px);
+
+    /*
+     * Around 68vh, but controlled.
+     */
+    height: clamp(
+      500px,
+      68vh,
+      680px
+    );
+
+    min-height: 0;
+
+    margin-inline: auto;
+
+    margin-bottom: 20px;
+
+    border-radius: 6px;
+
+    overflow: hidden;
+  }
+
+
+  .dish-hero__image {
+    object-position: center center;
+  }
+
+
+  .dish-hero__content {
+    width: 100%;
+    height: 100%;
+
+    padding:
+      80px
+      20px
+      46px;
+
+    align-items: flex-start;
+
+    text-align: left;
+  }
+
+
+  .dish-hero__veil {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(20, 18, 16, 0.06) 0%,
+        rgba(20, 18, 16, 0.10) 25%,
+        rgba(20, 18, 16, 0.30) 48%,
+        rgba(20, 18, 16, 0.70) 72%,
+        rgba(20, 18, 16, 0.96) 100%
+      );
+  }
+
+
+  .dish-hero__media::after {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(20, 18, 16, 0.18) 0%,
+        transparent 70%
+      );
+  }
+
+
+  .dish-hero__meta {
+    margin-bottom: 15px;
+
+    letter-spacing: 2px;
+  }
+
+
+  .dish-hero__title {
+    max-width: 700px;
+
+    font-size: clamp(
+      3.4rem,
+      11vw,
+      6rem
+    );
+
+    line-height: 0.9;
+
+    letter-spacing: -0.04em;
+  }
+
+
+  .dish-hero__note {
+    max-width: 540px;
+
+    margin-top: 20px;
+
+    font-size: var(--text-body-lg);
+  }
+
+
+  .dish-hero__scroll {
+    margin-top: 30px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .dish-hero {
+    /*
+     * 16px left + right.
+     */
+    width: calc(100% - 32px);
+
+    /*
+     * Controlled mobile height.
+     */
+    height: clamp(
+      500px,
+      72vh,
+      650px
+    );
+
+    margin-inline: auto;
+
+    margin-bottom: 16px;
+
+    border-radius: 6px;
+  }
+
+
+  .dish-hero__image {
+    object-position: center center;
+
+    transform: scale(1.015);
+  }
+
+
+  .dish-hero__content {
+    width: 100%;
+    height: 100%;
+
+    padding:
+      70px
+      16px
+      32px;
+
+    align-items: flex-start;
+
+    text-align: left;
+  }
+
+
+  .dish-hero__veil {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(20, 18, 16, 0.04) 0%,
+        rgba(20, 18, 16, 0.08) 28%,
+        rgba(20, 18, 16, 0.28) 48%,
+        rgba(20, 18, 16, 0.72) 72%,
+        rgba(20, 18, 16, 0.96) 100%
+      );
+  }
+
+
+  .dish-hero__media::after {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(20, 18, 16, 0.16) 0%,
+        transparent 70%
+      );
+  }
+
+
+  .dish-hero__meta {
+    margin-bottom: 13px;
+
+    font-size: 10px;
+
+    letter-spacing: 1.8px;
+  }
+
+
+  .dish-hero__title {
+    max-width: 100%;
+
+    font-size: clamp(
+      3rem,
+      15vw,
+      5rem
+    );
+
+    line-height: 0.9;
+
+    letter-spacing: -0.04em;
+  }
+
+
+  .dish-hero__note {
+    max-width: 100%;
+
+    margin-top: 18px;
+
+    font-size: 14px;
+
+    line-height: 1.55;
+  }
+
+
+  .dish-hero__scroll {
+    gap: 9px;
+
+    margin-top: 26px;
+
+    font-size: 9px;
+
+    letter-spacing: 1.4px;
+  }
+
+
+  .dish-hero__scroll-line {
+    width: 28px;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 400px) {
+
+  .dish-hero {
+    width: calc(100% - 24px);
+
+    height: clamp(
+      480px,
+      70vh,
+      600px
+    );
+
+    margin-inline: auto;
+
+    margin-bottom: 12px;
+
+    border-radius: 6px;
+  }
+
+
+  .dish-hero__image {
+    object-position: center center;
+
+    transform: scale(1.01);
+  }
+
+
+  .dish-hero__content {
+    width: 100%;
+    height: 100%;
+
+    padding:
+      64px
+      14px
+      26px;
+  }
+
+
+  .dish-hero__meta {
+    margin-bottom: 12px;
+
+    font-size: 9px;
+
+    letter-spacing: 1.6px;
+  }
+
+
+  .dish-hero__title {
+    font-size: clamp(
+      2.7rem,
+      15vw,
+      4rem
+    );
+
+    line-height: 0.9;
+  }
+
+
+  .dish-hero__note {
+    margin-top: 17px;
+
+    font-size: 13px;
+
+    line-height: 1.55;
+  }
+
+
+  .dish-hero__scroll {
+    margin-top: 23px;
+
+    font-size: 8px;
+
+    letter-spacing: 1.2px;
+  }
+
+
+  .dish-hero__scroll-line {
+    width: 25px;
+  }
+
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 340px) {
+
+  .dish-hero {
+    width: calc(100% - 20px);
+
+    height: clamp(
+      460px,
+      68vh,
+      570px
+    );
+
+    margin-inline: auto;
+
+    margin-bottom: 10px;
+
+    border-radius: 5px;
+  }
+
+
+  .dish-hero__content {
+    width: 100%;
+    height: 100%;
+
+    padding:
+      58px
+      12px
+      22px;
+  }
+
+
+  .dish-hero__meta {
+    font-size: 8px;
+
+    letter-spacing: 1.4px;
+  }
+
+
+  .dish-hero__title {
+    font-size: 2.55rem;
+
+    line-height: 0.9;
+  }
+
+
+  .dish-hero__note {
+    font-size: 12.5px;
+
+    line-height: 1.5;
+  }
+
+
+  .dish-hero__scroll {
+    gap: 7px;
+
+    margin-top: 20px;
+
+    font-size: 8px;
+  }
+
+
+  .dish-hero__scroll-line {
+    width: 22px;
+  }
+
+}
+
+
+/* =========================================================
+   DESKTOP HOVER
+   ========================================================= */
+
+@media (hover: hover) and (pointer: fine) {
+
+  .dish-hero:hover .dish-hero__image {
+    transform: scale(1.025);
+  }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .dish-hero__image {
+    transform: none;
+
+    transition: none;
+  }
+
+}
+</style>

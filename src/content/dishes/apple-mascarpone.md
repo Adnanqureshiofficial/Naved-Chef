@@ -3,7 +3,11 @@ title: "Apple Mascarpone"
 category: "plated-dessert"
 flavorNote: "Fresh apple and creamy mascarpone brought together in a refined contemporary dessert"
 heroImage: "/images/dishes/plated-dessert/apple-mascarpone-hero.jpeg"
-gallery: []
+gallery: [
+"/images/dishes/plated-dessert/yogurt-panacota-2.jpeg",
+"/images/dishes/plated-dessert/yogurt-panacota-1.jpeg",
+"/images/dishes/plated-dessert/yogurt-panacota-3.jpeg"
+]
 year: 2024
 featured: false
 order: 7
