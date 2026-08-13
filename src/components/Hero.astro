@@ -1,451 +1,1361 @@
 ---
-// Placeholder copy — swap in real name, hotel, and signature line.
 ---
 <section class="hero" id="hero">
-  <div class="hero__bg" aria-hidden="true" id="hero-bg">
+  <!-- =====================================================
+       BACKGROUND IMAGE
+       ===================================================== -->
+
+  <div class="hero__media" aria-hidden="true">
     <img
+      class="hero__image"
+      id="hero-image"
       src="/images/hero.png"
       alt=""
+      width="1920"
+      height="1080"
+      fetchpriority="high"
+      decoding="async"
     />
   </div>
 
-  <div class="hero__scrim" aria-hidden="true"></div>
+  <!-- =====================================================
+       CINEMATIC OVERLAYS
+       ===================================================== -->
+
+  <div class="hero__overlay" aria-hidden="true"></div>
+  <div class="hero__bottom-fade" aria-hidden="true"></div>
+
+  <!-- =====================================================
+       HERO CONTENT
+       ===================================================== -->
 
   <div class="container hero__content">
 
-    <p
-      class="eyebrow hero__badge"
-      id="hero-badge"
-    >
-      Chef de Partie – Pastry & Bakery, Taj Hotels
-    </p>
+    <!-- Editorial eyebrow -->
 
-    <h1
-      class="hero__title font-display"
-      id="hero-title"
-    >
-      SHAIKH NAVED
+    <div class="hero__eyebrow-wrap">
+      <span class="hero__eyebrow-line" aria-hidden="true"></span>
+
+      <p class="hero__eyebrow">
+        Chef de Partie
+      </p>
+
+      <span class="hero__eyebrow-divider" aria-hidden="true"></span>
+
+      <p class="hero__eyebrow-sub">
+        Pastry &amp; Bakery · Taj Hotels
+      </p>
+    </div>
+
+
+    <!-- Main identity -->
+
+    <h1 class="hero__title font-display" id="hero-title">
+      <span class="hero__title-line">
+        SHAIKH
+      </span>
+
+      <span class="hero__title-line hero__title-line--second">
+        NAVED
+      </span>
     </h1>
 
-    <p
-      class="hero__tagline"
-      id="hero-tagline"
-    >
-      Experienced Bakery & Pastry professional with over 9 years of
-      progressive experience in luxury and five-star hotel kitchens.
-      Expertise in pastry production, buffet operations, cake shop
-      management, team supervision, menu planning, SAP ordering,
-      and audit compliance.
+
+    <!-- Short editorial description -->
+
+    <p class="hero__description">
+      Pastry &amp; bakery professional specialising in refined desserts,
+      viennoiserie and contemporary chocolate craftsmanship.
     </p>
 
+
+    <!-- Supporting metadata -->
+
+    <div class="hero__meta">
+      <span>Mumbai · India</span>
+      <span class="hero__meta-dot" aria-hidden="true"></span>
+      <span>Luxury Hospitality</span>
+    </div>
+
   </div>
 
-  <div class="hero__scroll-cue" aria-hidden="true">
-    <span></span>
+
+  <!-- =====================================================
+       SCROLL CUE
+       ===================================================== -->
+
+  <div class="hero__scroll" aria-hidden="true">
+    <span class="hero__scroll-label">Scroll</span>
+
+    <span class="hero__scroll-line">
+      <span></span>
+    </span>
   </div>
+
 </section>
 
+
 <style>
-  /* =====================================================
-     HERO
-     ===================================================== */
+
+/* =========================================================
+   HERO — BASE
+   ========================================================= */
+
+.hero {
+  position: relative;
+
+  width: 100%;
+  min-height: 100svh;
+  min-height: 100dvh;
+
+  overflow: hidden;
+
+  isolation: isolate;
+
+  background: var(--color-bg);
+}
+
+
+/* =========================================================
+   MEDIA
+   ========================================================= */
+
+.hero__media {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: -3;
+
+  overflow: hidden;
+
+  background: var(--color-bg);
+}
+
+
+.hero__image {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  max-width: none;
+
+  object-fit: cover;
+
+  /*
+   * Desktop composition:
+   *
+   * left  → typography
+   * right → chef
+   *
+   * The actual photograph already has excellent negative
+   * space on the left, so we preserve the composition.
+   */
+
+  object-position: 65% center;
+
+  transform: scale(1.04);
+
+  will-change: transform;
+}
+
+
+/* =========================================================
+   PRIMARY OVERLAY
+   ========================================================= */
+
+.hero__overlay {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: -2;
+
+  pointer-events: none;
+
+  /*
+   * Very subtle left-side treatment.
+   * We don't want to bury the photograph.
+   */
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(20, 18, 16, 0.48) 0%,
+      rgba(20, 18, 16, 0.22) 38%,
+      rgba(20, 18, 16, 0.05) 70%,
+      rgba(20, 18, 16, 0.02) 100%
+    );
+}
+
+
+/* =========================================================
+   BOTTOM FADE
+   ========================================================= */
+
+.hero__bottom-fade {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: -1;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(20, 18, 16, 0.72) 0%,
+      rgba(20, 18, 16, 0.34) 18%,
+      rgba(20, 18, 16, 0.08) 42%,
+      transparent 65%
+    );
+}
+
+
+/* =========================================================
+   HERO CONTENT
+   ========================================================= */
+
+.hero__content {
+  position: relative;
+
+  z-index: 2;
+
+  min-height: 100svh;
+  min-height: 100dvh;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: flex-end;
+
+  width: 100%;
+
+  padding-top: 120px;
+
+  padding-bottom:
+    clamp(110px, 14vh, 150px);
+
+  /*
+   * Keep the content on the negative-space side
+   * of the photograph.
+   */
+
+  padding-right: 50%;
+}
+
+
+/* =========================================================
+   EDITORIAL EYEBROW
+   ========================================================= */
+
+.hero__eyebrow-wrap {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 9px;
+
+  margin-bottom: 24px;
+}
+
+
+.hero__eyebrow {
+  margin: 0;
+
+  color: var(--color-accent);
+
+  font-family: var(--font-body);
+
+  font-size: 11px;
+
+  font-weight: 500;
+
+  line-height: 1;
+
+  letter-spacing: 2.2px;
+
+  text-transform: uppercase;
+
+  white-space: nowrap;
+}
+
+
+.hero__eyebrow-sub {
+  margin: 0;
+
+  color: rgba(249, 246, 240, 0.76);
+
+  font-family: var(--font-body);
+
+  font-size: 10px;
+
+  font-weight: 400;
+
+  line-height: 1;
+
+  letter-spacing: 1.8px;
+
+  text-transform: uppercase;
+}
+
+
+.hero__eyebrow-line {
+  display: block;
+
+  width: 28px;
+  height: 1px;
+
+  flex: 0 0 auto;
+
+  background: var(--color-accent);
+}
+
+
+.hero__eyebrow-divider {
+  width: 1px;
+  height: 12px;
+
+  margin-inline: 2px;
+
+  background: rgba(249, 246, 240, 0.25);
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.hero__title {
+  display: flex;
+
+  flex-direction: column;
+
+  margin: 0;
+
+  color: var(--color-text);
+
+  font-family: var(--font-display);
+
+  font-size:
+    clamp(78px, 8.6vw, 138px);
+
+  font-weight: 400;
+
+  line-height: 0.78;
+
+  letter-spacing: -0.045em;
+
+  text-wrap: nowrap;
+}
+
+
+.hero__title-line {
+  display: block;
+
+  white-space: nowrap;
+}
+
+
+.hero__title-line--second {
+  margin-left: 0.38em;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
+
+.hero__description {
+  max-width: 40ch;
+
+  margin: 30px 0 0;
+
+  color: rgba(249, 246, 240, 0.78);
+
+  font-family: var(--font-body);
+
+  font-size:
+    clamp(15px, 1.15vw, 18px);
+
+  font-weight: 400;
+
+  line-height: 1.6;
+
+  text-wrap: pretty;
+}
+
+
+/* =========================================================
+   METADATA
+   ========================================================= */
+
+.hero__meta {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin-top: 25px;
+
+  color: rgba(249, 246, 240, 0.58);
+
+  font-family: var(--font-body);
+
+  font-size: 9px;
+
+  font-weight: 500;
+
+  line-height: 1;
+
+  letter-spacing: 1.8px;
+
+  text-transform: uppercase;
+}
+
+
+.hero__meta-dot {
+  width: 3px;
+  height: 3px;
+
+  flex: 0 0 auto;
+
+  border-radius: 50%;
+
+  background: var(--color-accent);
+}
+
+
+/* =========================================================
+   SCROLL CUE
+   ========================================================= */
+
+.hero__scroll {
+  position: absolute;
+
+  right: clamp(24px, 4vw, 64px);
+  bottom: 32px;
+
+  z-index: 5;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  color: rgba(249, 246, 240, 0.56);
+
+  font-family: var(--font-body);
+
+  font-size: 9px;
+
+  font-weight: 500;
+
+  letter-spacing: 2px;
+
+  text-transform: uppercase;
+
+  writing-mode: vertical-rl;
+}
+
+
+.hero__scroll-line {
+  position: relative;
+
+  display: block;
+
+  width: 1px;
+  height: 48px;
+
+  overflow: hidden;
+
+  background: rgba(249, 246, 240, 0.18);
+}
+
+
+.hero__scroll-line span {
+  position: absolute;
+
+  top: -100%;
+
+  left: 0;
+
+  width: 1px;
+  height: 55%;
+
+  background: var(--color-accent);
+
+  animation:
+    heroScrollLine 2.2s
+    var(--ease-luxury)
+    infinite;
+}
+
+
+@keyframes heroScrollLine {
+
+  0% {
+    top: -60%;
+  }
+
+  55% {
+    top: 100%;
+  }
+
+  100% {
+    top: 100%;
+  }
+
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+   ========================================================= */
+
+@media (min-width: 1440px) {
+
+  .hero__content {
+    padding-right: 52%;
+  }
+
+  .hero__title {
+    font-size: clamp(100px, 8vw, 150px);
+  }
+
+  .hero__description {
+    max-width: 42ch;
+  }
+
+}
+
+
+/* =========================================================
+   LAPTOP
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+  .hero__content {
+    padding-right: 46%;
+  }
+
+  .hero__title {
+    font-size:
+      clamp(72px, 8.5vw, 112px);
+  }
+
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .hero__image {
+    /*
+     * Move the focal point slightly toward the chef
+     * as the viewport narrows.
+     */
+
+    object-position: 68% center;
+  }
+
+
+  .hero__content {
+    padding-right: 42%;
+
+    padding-bottom:
+      clamp(100px, 12vh, 125px);
+  }
+
+
+  .hero__title {
+    font-size:
+      clamp(68px, 9vw, 94px);
+  }
+
+
+  .hero__description {
+    max-width: 36ch;
+
+    font-size: 15px;
+  }
+
+
+  .hero__scroll {
+    right: 24px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
 
   .hero {
-    position: relative;
-
     min-height: 100svh;
-
-    display: flex;
-    align-items: flex-end;
-
-    overflow: hidden;
-
-    isolation: isolate;
+    min-height: 100dvh;
   }
 
 
-  /* =====================================================
-     BACKGROUND IMAGE
-     ===================================================== */
+  /* -------------------------------------------------------
+     MOBILE IMAGE
+     ------------------------------------------------------- */
 
-  .hero__bg {
-    position: absolute;
-
-    inset: 0;
-
-    z-index: -2;
-
-    background: var(--color-surface);
-  }
-
-
-  .hero__bg img {
-    display: block;
-
-    width: 100%;
-    height: 100%;
-
-    max-width: none;
-
-    object-fit: cover;
+  .hero__image {
 
     /*
-     * Chef is positioned toward the right side
-     * of the source landscape image.
+     * The chef is the subject on mobile.
+     *
+     * Keep the face/hat dominant instead of trying to
+     * preserve the desktop negative-space composition.
      */
-    object-position: 72% center;
 
-    border-radius: 0;
+    object-position: 51% center;
+
+    transform: scale(1.02);
   }
 
 
-  /* =====================================================
-     HERO SCRIM
-     ===================================================== */
+  /* -------------------------------------------------------
+     MOBILE OVERLAY
+     ------------------------------------------------------- */
 
-  .hero__scrim {
-    position: absolute;
+  .hero__overlay {
 
-    inset: 0;
-
-    z-index: -1;
-
-    pointer-events: none;
-
-    /*
-     * Keep the image visible.
-     * Darker toward the bottom for typography.
-     */
     background:
       linear-gradient(
-        to top,
-        rgba(20, 18, 16, 0.94) 0%,
-        rgba(20, 18, 16, 0.60) 24%,
-        rgba(20, 18, 16, 0.16) 58%,
-        rgba(20, 18, 16, 0.05) 100%
+        to bottom,
+        rgba(20, 18, 16, 0.12) 0%,
+        rgba(20, 18, 16, 0.02) 38%,
+        rgba(20, 18, 16, 0.22) 60%,
+        rgba(20, 18, 16, 0.68) 100%
       );
   }
 
 
-  /* =====================================================
-     HERO CONTENT
-     ===================================================== */
+  .hero__bottom-fade {
+
+    background:
+      linear-gradient(
+        to top,
+        rgba(20, 18, 16, 0.94) 0%,
+        rgba(20, 18, 16, 0.68) 17%,
+        rgba(20, 18, 16, 0.18) 38%,
+        transparent 60%
+      );
+  }
+
+
+  /* -------------------------------------------------------
+     MOBILE CONTENT
+     ------------------------------------------------------- */
 
   .hero__content {
-    position: relative;
 
-    z-index: 2;
+    /*
+     * Important:
+     *
+     * Do not use the desktop 50% right padding.
+     * The previous layout became crowded because the text
+     * was competing with the chef.
+     */
 
-    width: 100%;
+    min-height: 100svh;
+    min-height: 100dvh;
 
-    padding-top: 100px;
+    padding-top: 96px;
+
+    padding-right:
+      clamp(20px, 6vw, 32px);
+
+    padding-left:
+      clamp(20px, 6vw, 32px);
 
     padding-bottom:
-      clamp(64px, 9vh, 110px);
+      clamp(74px, 10vh, 100px);
+
+    justify-content: flex-end;
   }
 
 
-  /* =====================================================
-     BADGE
-     ===================================================== */
+  /* -------------------------------------------------------
+     MOBILE EYEBROW
+     ------------------------------------------------------- */
 
-  .hero__badge {
-    width: fit-content;
+  .hero__eyebrow-wrap {
 
-    margin: 0 0 16px;
+    gap: 7px;
 
-    padding: 5px 11px;
+    margin-bottom: 18px;
 
-    border-radius: 12px;
+    max-width: 100%;
+  }
 
-    background: rgba(200, 169, 107, 0.62);
 
-    color: #fff;
+  .hero__eyebrow {
 
-    font-size: var(--text-caption);
-    font-weight: 400;
+    font-size: 10px;
+
+    letter-spacing: 1.8px;
+  }
+
+
+  .hero__eyebrow-sub {
+
+    font-size: 9px;
 
     letter-spacing: 1.4px;
-
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
   }
 
 
-  /* =====================================================
-     TITLE
-     ===================================================== */
+  .hero__eyebrow-line {
+
+    width: 22px;
+  }
+
+
+  .hero__eyebrow-divider {
+
+    height: 10px;
+  }
+
+
+  /* -------------------------------------------------------
+     MOBILE TITLE
+     ------------------------------------------------------- */
 
   .hero__title {
-    max-width: 16ch;
-
-    margin: 0;
-
-    color: var(--color-text);
-
-    font-size: var(--text-display);
-
-    font-weight: 500;
-
-    line-height: 0.95;
-
-    letter-spacing: -0.02em;
-
-    text-wrap: balance;
-  }
-
-
-  /* =====================================================
-     TAGLINE
-     ===================================================== */
-
-  .hero__tagline {
-    max-width: 42ch;
-
-    margin: 20px 0 0;
-
-    color: rgba(249, 246, 240, 0.78);
-
-    font-size: var(--text-body-lg);
-
-    line-height: 1.65;
-
-    text-wrap: pretty;
-  }
-
-
-  /* =====================================================
-     SCROLL CUE
-     ===================================================== */
-
-  .hero__scroll-cue {
-    position: absolute;
-
-    bottom: 24px;
-    left: 50%;
-
-    z-index: 3;
-
-    transform: translateX(-50%);
-  }
-
-
-  .hero__scroll-cue span {
-    display: block;
-
-    width: 1px;
-    height: 40px;
-
-    background: rgba(212, 175, 55, 0.45);
-  }
-
-
-  /* =====================================================
-     TABLET
-     ===================================================== */
-
-  @media (max-width: 900px) {
-
-    .hero__bg img {
-      /*
-       * Move the focal point slightly further right
-       * as the viewport becomes narrower.
-       */
-      object-position: 76% center;
-    }
-
-    .hero__content {
-      padding-bottom: 76px;
-    }
-
-  }
-
-
-  /* =====================================================
-     MOBILE
-     ===================================================== */
-
-  @media (max-width: 768px) {
-
-    .hero {
-      min-height: 100svh;
-
-      /*
-       * Prevent excessive horizontal composition issues.
-       */
-      width: 100%;
-    }
-
-
-    .hero__bg img {
-      /*
-       * IMPORTANT:
-       * Chef is on the right side of the original image.
-       * Portrait `cover` crops the horizontal edges,
-       * therefore move the focal point right.
-       */
-      object-position: 78% center;
-    }
-
 
     /*
-     * Remove the long description on mobile.
+     * Large enough to feel editorial,
+     * but no longer collides with the bottom edge.
+     */
+
+    font-size:
+      clamp(58px, 16vw, 82px);
+
+    line-height: 0.82;
+
+    letter-spacing: -0.04em;
+  }
+
+
+  .hero__title-line--second {
+
+    /*
+     * Slight offset gives the name a crafted,
+     * editorial composition rather than a generic heading.
+     */
+
+    margin-left: 0.28em;
+  }
+
+
+  /* -------------------------------------------------------
+     MOBILE DESCRIPTION
+     ------------------------------------------------------- */
+
+  .hero__description {
+
+    max-width: 31ch;
+
+    margin-top: 22px;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+
+    color: rgba(249, 246, 240, 0.72);
+  }
+
+
+  /* -------------------------------------------------------
+     MOBILE METADATA
+     ------------------------------------------------------- */
+
+  .hero__meta {
+
+    margin-top: 18px;
+
+    gap: 8px;
+
+    font-size: 8px;
+
+    letter-spacing: 1.5px;
+  }
+
+
+  /* -------------------------------------------------------
+     MOBILE SCROLL
+     ------------------------------------------------------- */
+
+  .hero__scroll {
+
+    right: 18px;
+
+    bottom: 20px;
+
+    font-size: 8px;
+
+    gap: 8px;
+  }
+
+
+  .hero__scroll-line {
+
+    height: 34px;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+  .hero__image {
+
+    /*
+     * Your uploaded mobile composition shows the chef
+     * centered beautifully.
      *
-     * This gives the photograph much more visual presence.
+     * Slightly favor the upper/center area to preserve
+     * the hat and face.
      */
-    .hero__tagline {
-      display: none;
-    }
+
+    object-position: 78% 42%;
+
+    transform: scale(1.015);
+  }
 
 
-    .hero__content {
-      padding-top: 90px;
+  .hero__content {
 
-      padding-bottom:
-        clamp(70px, 10vh, 90px);
+    padding-top: 82px;
 
-      text-align: left;
-    }
+    padding-left: 20px;
+    padding-right: 20px;
 
+    /*
+     * Leave enough breathing room below NAVED.
+     */
 
-    .hero__badge {
-      margin-bottom: 14px;
-
-      max-width: calc(100vw - 40px);
-
-      line-height: 1.4;
-    }
+    padding-bottom: 78px;
+  }
 
 
-    .hero__title {
-      max-width: 9ch;
+  .hero__eyebrow-wrap {
 
-      font-size:
-        clamp(48px, 14vw, 72px);
+    margin-bottom: 17px;
+  }
 
-      line-height: 0.92;
+
+  .hero__eyebrow {
+
+    /*
+     * Allow wrapping naturally if necessary,
+     * but don't create a giant pill.
+     */
+
+    white-space: normal;
+
+    line-height: 1.3;
+  }
+
+
+  .hero__eyebrow-sub {
+
+    white-space: normal;
+
+    line-height: 1.3;
+  }
+
+
+  .hero__title {
+
+    font-size:
+      clamp(54px, 16vw, 72px);
+
+    line-height: 0.84;
+  }
+
+
+  .hero__description {
+
+    max-width: 29ch;
+
+    margin-top: 20px;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+  }
+
+
+  .hero__meta {
+
+    margin-top: 16px;
+
+    font-size: 7.5px;
+
+    letter-spacing: 1.3px;
+  }
+
+
+  .hero__scroll {
+
+    display: none;
+  }
+
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 360px) {
+
+  .hero__image {
+
+    object-position: 78% 40%;
+  }
+
+
+  .hero__content {
+
+    padding-top: 76px;
+
+    padding-left: 18px;
+    padding-right: 18px;
+
+    padding-bottom: 68px;
+  }
+
+
+  .hero__eyebrow {
+
+    font-size: 9px;
+
+    letter-spacing: 1.5px;
+  }
+
+
+  .hero__eyebrow-sub {
+
+    font-size: 8px;
+
+    letter-spacing: 1.2px;
+  }
+
+
+  .hero__title {
+
+    font-size: 52px;
+
+    line-height: 0.84;
+  }
+
+
+  .hero__description {
+
+    max-width: 27ch;
+
+    margin-top: 18px;
+
+    font-size: 12px;
+  }
+
+
+  .hero__meta {
+
+    margin-top: 14px;
+
+    font-size: 7px;
+  }
+
+}
+
+
+/* =========================================================
+   LANDSCAPE PHONES
+   ========================================================= */
+
+@media (max-height: 600px) and (max-width: 900px) {
+
+  .hero__content {
+
+    padding-top: 78px;
+
+    padding-bottom: 48px;
+  }
+
+
+  .hero__eyebrow-wrap {
+
+    margin-bottom: 12px;
+  }
+
+
+  .hero__title {
+
+    font-size:
+      clamp(46px, 9vw, 68px);
+  }
+
+
+  .hero__description {
+
+    max-width: 45ch;
+
+    margin-top: 14px;
+
+    font-size: 12px;
+
+    line-height: 1.4;
+  }
+
+
+  .hero__meta {
+
+    margin-top: 11px;
+  }
+
+
+  .hero__scroll {
+
+    display: none;
+  }
+
+}
+
+
+/* =========================================================
+   LARGE / TALL MOBILE
+   ========================================================= */
+
+@media (min-height: 800px) and (max-width: 768px) {
+
+  .hero__content {
+
+    padding-bottom:
+      clamp(90px, 12vh, 120px);
+  }
+
+
+  .hero__description {
+
+    max-width: 31ch;
+  }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .hero__image {
+
+    transform: none !important;
+  }
+
+
+  .hero__scroll-line span {
+
+    animation: none !important;
+
+    top: 0;
+  }
+
+}
+
+
+/* =========================================================
+   FOCUS
+   ========================================================= */
+
+.hero :focus-visible {
+
+  outline: 2px solid var(--color-accent);
+
+  outline-offset: 5px;
+}
+
+</style>
+
+
+<script>
+
+  /*
+   * =========================================================
+   * HERO MOTION
+   * =========================================================
+   *
+   * Uses the same motion.js architecture already used by
+   * the portfolio section.
+   *
+   * Expected exports:
+   *
+   *   gsap
+   *   ScrollTrigger
+   *   mm
+   *
+   * The animation is deliberately restrained.
+   *
+   * The goal is:
+   *
+   *     cinematic reveal
+   *     not
+   *     "animated website"
+   *
+   * =========================================================
+   */
+
+  const hero = document.getElementById("hero");
+  const heroImage = document.getElementById("hero-image");
+
+  if (hero && heroImage) {
+
+    let initialized = false;
+
+    async function initHeroMotion() {
+
+      if (initialized) return;
+
+      initialized = true;
+
+      try {
+
+        const {
+          gsap,
+          ScrollTrigger,
+          mm
+        } = await import("../scripts/motion.js");
+
+
+        /*
+         * =====================================================
+         * DESKTOP / TABLET MOTION
+         * =====================================================
+         */
+
+        mm.add(
+          {
+            motion:
+              "(prefers-reduced-motion: no-preference)"
+          },
+          (context) => {
+
+            const {
+              motion
+            } = context.conditions as {
+              motion: boolean;
+            };
+
+
+            if (!motion) return;
+
+
+            /*
+             * -------------------------------------------------
+             * INITIAL CINEMATIC REVEAL
+             * -------------------------------------------------
+             */
+
+            const introTimeline = gsap.timeline({
+              defaults: {
+                ease: "power3.out"
+              }
+            });
+
+
+            introTimeline.fromTo(
+              heroImage,
+              {
+                scale: 1.075
+              },
+              {
+                scale: 1,
+                duration: 1.8,
+                ease: "power2.out"
+              },
+              0
+            );
+
+
+            introTimeline.fromTo(
+              ".hero__eyebrow-wrap",
+              {
+                opacity: 0,
+                y: 20
+              },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.65
+              },
+              0.25
+            );
+
+
+            introTimeline.fromTo(
+              ".hero__title-line",
+              {
+                opacity: 0,
+                y: 45
+              },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.85,
+                stagger: 0.10
+              },
+              0.38
+            );
+
+
+            introTimeline.fromTo(
+              ".hero__description",
+              {
+                opacity: 0,
+                y: 20
+              },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.65
+              },
+              0.68
+            );
+
+
+            introTimeline.fromTo(
+              ".hero__meta",
+              {
+                opacity: 0,
+                y: 15
+              },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.55
+              },
+              0.82
+            );
+
+
+            introTimeline.fromTo(
+              ".hero__scroll",
+              {
+                opacity: 0
+              },
+              {
+                opacity: 1,
+                duration: 0.55
+              },
+              1.05
+            );
+
+
+            /*
+             * -------------------------------------------------
+             * SUBTLE SCROLL PARALLAX
+             * -------------------------------------------------
+             *
+             * Only the photograph moves.
+             *
+             * Typography stays grounded.
+             */
+
+            const parallax = gsap.to(
+              heroImage,
+              {
+                yPercent: 5,
+
+                ease: "none",
+
+                scrollTrigger: {
+                  trigger: hero,
+
+                  start: "top top",
+
+                  end: "bottom top",
+
+                  scrub: 1.2,
+
+                  invalidateOnRefresh: true
+                }
+              }
+            );
+
+
+            return () => {
+
+              introTimeline.kill();
+
+              parallax.scrollTrigger?.kill();
+
+              parallax.kill();
+
+            };
+
+          }
+        );
+
+      } catch (error) {
+
+        /*
+         * If the motion module fails to load,
+         * the hero remains fully functional.
+         */
+
+        console.warn(
+          "Hero motion could not be initialized.",
+          error
+        );
+
+      }
+
     }
 
 
     /*
-     * Slightly stronger bottom scrim because
-     * the title sits directly over the photograph.
+     * The hero is above the fold, so initialise after
+     * the browser has had a chance to render the image.
      */
-    .hero__scrim {
-      background:
-        linear-gradient(
-          to top,
-          rgba(20, 18, 16, 0.94) 0%,
-          rgba(20, 18, 16, 0.64) 25%,
-          rgba(20, 18, 16, 0.18) 58%,
-          rgba(20, 18, 16, 0.03) 100%
-        );
+
+    if (document.readyState === "loading") {
+
+      document.addEventListener(
+        "DOMContentLoaded",
+        initHeroMotion,
+        { once: true }
+      );
+
+    } else {
+
+      initHeroMotion();
+
     }
 
-
-    .hero__scroll-cue {
-      bottom: 18px;
-    }
-
-
-    .hero__scroll-cue span {
-      height: 30px;
-    }
   }
 
-
-  /* =====================================================
-     SMALL PHONES
-     ===================================================== */
-
-  @media (max-width: 480px) {
-
-    .hero__bg img {
-      /*
-       * Narrower viewport = stronger right focal point.
-       */
-      object-position: 80% center;
-    }
-
-
-    .hero__content {
-      padding-top: 84px;
-
-      padding-bottom: 68px;
-    }
-
-
-    .hero__badge {
-      padding: 4px 9px;
-
-      font-size: 10px;
-
-      letter-spacing: 1.1px;
-    }
-
-
-    .hero__title {
-      max-width: 8ch;
-
-      font-size:
-        clamp(46px, 15vw, 64px);
-    }
-
-
-    .hero__scrim {
-      background:
-        linear-gradient(
-          to top,
-          rgba(20, 18, 16, 0.96) 0%,
-          rgba(20, 18, 16, 0.68) 26%,
-          rgba(20, 18, 16, 0.16) 60%,
-          rgba(20, 18, 16, 0.02) 100%
-        );
-    }
-  }
-
-
-  /* =====================================================
-     VERY SMALL PHONES
-     ===================================================== */
-
-  @media (max-width: 360px) {
-
-    .hero__bg img {
-      object-position: 82% center;
-    }
-
-
-    .hero__content {
-      padding-bottom: 64px;
-    }
-
-
-    .hero__title {
-      font-size: 45px;
-    }
-  }
-
-
-  /* =====================================================
-     LANDSCAPE MOBILE
-     ===================================================== */
-
-  @media (max-height: 600px) and (max-width: 900px) {
-
-    .hero__content {
-      padding-top: 84px;
-      padding-bottom: 48px;
-    }
-
-
-    .hero__title {
-      font-size: clamp(42px, 8vw, 62px);
-    }
-
-
-    .hero__scroll-cue {
-      display: none;
-    }
-  }
-</style>
+</script>

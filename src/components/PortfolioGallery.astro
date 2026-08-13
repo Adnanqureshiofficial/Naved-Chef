@@ -2,172 +2,1504 @@
 import { getCollection } from "astro:content";
 
 const allDishes = await getCollection("dishes");
+
 const featured = allDishes
-  .filter((d) => d.data.featured)
+  .filter((dish) => dish.data.featured)
   .sort((a, b) => a.data.order - b.data.order);
 
 const categoryLabels: Record<string, string> = {
+  "plated-dessert": "Plated Dessert",
+  "cake-entremet": "Cake & Entremet",
+  "chocolate-showpieces": "Chocolate Showpieces",
   viennoiserie: "Viennoiserie",
-  "plated-art": "Plated Art",
-  showpieces: "Showpieces",
 };
 ---
 
-<section class="portfolio-horizontal" id="portfolio">
-  <div class="container portfolio-horizontal__header">
-    <p class="eyebrow">Signature Creations</p>
-    <h2>Culinary Portfolio</h2>
-    <a href="/creations" class="portfolio-horizontal__link"
-      >View full portfolio by category →</a
-    >
+<section
+  class="portfolio"
+  id="portfolio"
+  aria-labelledby="portfolio-title"
+>
+  <!-- =====================================================
+       SECTION HEADER
+       ===================================================== -->
+
+  <div class="container portfolio__header">
+
+    <div class="portfolio__heading">
+      <p class="eyebrow">Signature Creations</p>
+
+      <h2 id="portfolio-title">
+        A selection from<br />
+        the pastry kitchen
+      </h2>
+    </div>
+
+    <div class="portfolio__intro">
+      <p>
+        Selected pastry, chocolate and bakery creations developed
+        through contemporary technique and refined presentation.
+      </p>
+
+      <a
+        href="/creations"
+        class="portfolio__link"
+        aria-label="View the complete culinary portfolio by category"
+      >
+        <span>View full portfolio</span>
+        <span class="portfolio__link-arrow" aria-hidden="true">↗</span>
+      </a>
+    </div>
+
   </div>
 
-  <div class="horizontal-track-wrap">
-    <div class="horizontal-track" id="horizontal-track">
+  <!-- =====================================================
+       GALLERY
+       ===================================================== -->
+
+  <div class="portfolio__gallery">
+
+    <div
+      class="portfolio__track"
+      id="portfolio-track"
+      aria-label="Featured culinary creations"
+    >
+
       {
-        featured.map((dish) => (
-          <a
-            href={`/creations/${dish.id}`}
-            class="dish-card card"
-          >
-            <div class="dish-card__image">
-              <img
-                src={dish.data.heroImage}
-                alt={dish.data.title}
-                loading="lazy"
-              />
-            </div>
-            <p class="eyebrow">{categoryLabels[dish.data.category]}</p>
-            <h3>{dish.data.title}</h3>
-            <p class="dish-card__note">{dish.data.flavorNote}</p>
-          </a>
-        ))
+        featured.map((dish, index) => {
+          const category =
+            categoryLabels[dish.data.category] ?? dish.data.category;
+
+          const number = String(index + 1).padStart(2, "0");
+
+          return (
+            <article class="dish" data-dish-card>
+              <a
+                href={`/creations/${dish.id}`}
+                class="dish__link"
+                aria-label={`View ${dish.data.title}`}
+              >
+
+                <!-- Image -->
+                <div class="dish__media">
+
+                  <img
+                    src={dish.data.heroImage}
+                    alt={dish.data.title}
+                    class="dish__image"
+                    loading={index === 0 ? "eager" : "lazy"}
+                    decoding="async"
+                    fetchpriority={index === 0 ? "high" : "auto"}
+                  />
+
+                  <div
+                    class="dish__scrim"
+                    aria-hidden="true"
+                  ></div>
+
+                  <!-- Editorial number -->
+                  <span
+                    class="dish__number"
+                    aria-hidden="true"
+                  >
+                    {number}
+                  </span>
+
+                  <!-- Hover / interaction -->
+                  <span
+                    class="dish__explore"
+                    aria-hidden="true"
+                  >
+                    <span>View creation</span>
+                    <span class="dish__explore-arrow">↗</span>
+                  </span>
+
+                  <!-- Image metadata -->
+                  <div class="dish__overlay-content">
+
+                    <div class="dish__meta">
+                      <span>{category}</span>
+
+                      {
+                        dish.data.year && (
+                          <span>{dish.data.year}</span>
+                        )
+                      }
+                    </div>
+
+                    <span class="dish__line"></span>
+
+                    <h3 class="dish__title">
+                      {dish.data.title}
+                    </h3>
+
+                  </div>
+
+                </div>
+
+                <!-- Content outside image for accessibility / SEO -->
+                <div class="dish__details">
+
+                  <div class="dish__details-top">
+
+                    <p class="dish__category">
+                      {category}
+                    </p>
+
+                    {
+                      dish.data.year && (
+                        <span class="dish__year">
+                          {dish.data.year}
+                        </span>
+                      )
+                    }
+
+                  </div>
+
+                  <h3 class="dish__mobile-title">
+                    {dish.data.title}
+                  </h3>
+
+                  {
+                    dish.data.flavorNote && (
+                      <p class="dish__note">
+                        {dish.data.flavorNote}
+                      </p>
+                    )
+                  }
+
+                  <span class="dish__mobile-action">
+                    Explore creation
+                    <span aria-hidden="true">↗</span>
+                  </span>
+
+                </div>
+
+              </a>
+            </article>
+          );
+        })
       }
+
       {
         featured.length === 0 && (
-          <p class="portfolio-horizontal__empty">
-            Add dishes with <code>featured: true</code> in src/content/dishes/
-            to populate this gallery.
-          </p>
+          <div class="portfolio__empty">
+            <p>
+              Add dishes with
+              <code>featured: true</code>
+              in
+              <code>src/content/dishes/</code>
+              to populate this gallery.
+            </p>
+          </div>
         )
       }
+
     </div>
   </div>
+
+  <!-- =====================================================
+       MOBILE / GENERAL FOOTER
+       ===================================================== -->
+
+  {
+    featured.length > 0 && (
+      <div class="container portfolio__footer">
+
+        <span class="portfolio__footer-line"></span>
+
+        <a
+          href="/creations"
+          class="portfolio__footer-link"
+        >
+          Explore the complete collection
+          <span aria-hidden="true">↗</span>
+        </a>
+
+      </div>
+    )
+  }
+
 </section>
 
 <style>
-  .portfolio-horizontal {
-    padding-top: 100px;
-  }
-  .portfolio-horizontal__header {
-    padding-bottom: 40px;
-  }
-  .portfolio-horizontal__link {
-    display: inline-block;
-    margin-top: 16px;
-    color: var(--color-accent);
-    font-size: var(--text-caption);
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-  }
-  .horizontal-track-wrap {
-    overflow: hidden;
-  }
-  .horizontal-track {
-    display: flex;
-    gap: 24px;
-    padding-inline: clamp(20px, 5vw, 64px);
-    /* Mobile: native horizontal-scroll-disabled — falls back to vertical stack via flex-wrap */
-    flex-wrap: wrap;
-  }
-  .dish-card {
-    flex: 0 0 auto;
-    width: min(320px, 80vw);
-    padding: 20px;
-  }
-  .dish-card__image {
-    aspect-ratio: 4/5;
-    background: var(--color-bg);
-    margin-bottom: 16px;
-    overflow: hidden;
-    border-radius: var(--radius-image);
-  }
-  .dish-card__image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 0;
-  }
-  .dish-card__note {
-    color: var(--color-text-muted);
-    font-size: var(--text-body);
-    margin-top: 8px;
-  }
-  .portfolio-horizontal__empty {
-    color: var(--color-text-muted);
-    padding-block: 40px;
+  /* =========================================================
+   PORTFOLIO
+   ========================================================= */
+
+.portfolio {
+  position: relative;
+
+  width: 100%;
+  max-width: 100%;
+
+  padding-top: clamp(96px, 12vw, 160px);
+  padding-bottom: clamp(96px, 12vw, 160px);
+
+  overflow: clip;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.portfolio__header {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.35fr)
+    minmax(280px, 0.65fr);
+
+  gap: clamp(32px, 8vw, 120px);
+
+  align-items: end;
+
+  padding-bottom: clamp(48px, 7vw, 88px);
+}
+
+.portfolio__heading {
+  min-width: 0;
+  max-width: 760px;
+}
+
+.portfolio__heading .eyebrow {
+  margin-bottom: 18px;
+}
+
+.portfolio__heading h2 {
+  margin: 0;
+
+  max-width: 760px;
+
+  font-family: var(--font-display);
+  font-size: clamp(42px, 6vw, 84px);
+  font-weight: 400;
+
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+
+  text-wrap: balance;
+}
+
+.portfolio__intro {
+  width: 100%;
+  max-width: 390px;
+
+  justify-self: end;
+}
+
+.portfolio__intro > p {
+  margin: 0;
+
+  color: var(--color-text-muted);
+
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+
+  line-height: 1.7;
+}
+
+.portfolio__link {
+  display: inline-flex;
+
+  align-items: center;
+  gap: 10px;
+
+  margin-top: 26px;
+
+  color: var(--color-accent);
+
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: 500;
+
+  line-height: 1.3;
+  letter-spacing: 1.5px;
+
+  text-transform: uppercase;
+  text-decoration: none;
+
+  transition:
+    color 0.3s var(--ease-luxury),
+    gap 0.4s var(--ease-luxury);
+}
+
+.portfolio__link-arrow {
+  display: inline-block;
+
+  font-size: 16px;
+
+  transition:
+    transform 0.4s var(--ease-luxury);
+}
+
+.portfolio__link:hover {
+  color: var(--color-accent-hover);
+
+  gap: 14px;
+}
+
+.portfolio__link:hover .portfolio__link-arrow {
+  transform: translate(2px, -2px);
+}
+
+
+/* =========================================================
+   GALLERY
+   ========================================================= */
+
+.portfolio__gallery {
+  position: relative;
+
+  width: 100%;
+  max-width: 100%;
+
+  overflow: hidden;
+}
+
+.portfolio__track {
+  display: flex;
+
+  align-items: center;
+
+  gap: clamp(28px, 3.5vw, 56px);
+
+  width: max-content;
+
+  padding-inline:
+    max(
+      20px,
+      calc(
+        (100vw - var(--container-width, 1400px)) / 2
+      )
+    );
+
+  will-change: transform;
+}
+
+
+/* =========================================================
+   DISH
+   ========================================================= */
+
+.dish {
+  position: relative;
+
+  flex: 0 0 min(390px, 34vw);
+
+  min-width: 0;
+
+  margin: 0;
+  padding: 0;
+}
+
+.dish__link {
+  position: relative;
+
+  display: block;
+
+  color: inherit;
+  text-decoration: none;
+
+  outline: none;
+}
+
+
+/* =========================================================
+   IMAGE
+   ========================================================= */
+
+.dish__media {
+  position: relative;
+
+  width: 100%;
+
+  aspect-ratio: 4 / 5;
+
+  overflow: hidden;
+
+  background: var(--color-surface);
+
+  border-radius: var(--radius-image);
+
+  isolation: isolate;
+}
+
+.dish__image {
+  position: absolute;
+
+  inset: 0;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+
+  transform: scale(1);
+
+  transition:
+    transform 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.8s var(--ease-luxury);
+}
+
+
+/* =========================================================
+   IMAGE SCRIM
+   ========================================================= */
+
+.dish__scrim {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 1;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(20, 18, 16, 0.04) 0%,
+      rgba(20, 18, 16, 0) 42%,
+      rgba(20, 18, 16, 0.88) 100%
+    );
+
+  opacity: 0.9;
+
+  pointer-events: none;
+
+  transition:
+    opacity 0.8s var(--ease-luxury);
+}
+
+
+/* =========================================================
+   EDITORIAL NUMBER
+   ========================================================= */
+
+.dish__number {
+  position: absolute;
+
+  top: clamp(16px, 2vw, 26px);
+  left: clamp(16px, 2vw, 26px);
+
+  z-index: 3;
+
+  color: rgba(249, 246, 240, 0.78);
+
+  font-family: var(--font-display);
+  font-size: clamp(52px, 6vw, 88px);
+  font-weight: 400;
+
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+
+  pointer-events: none;
+
+  transition:
+    color 0.5s var(--ease-luxury),
+    transform 0.6s var(--ease-luxury);
+}
+
+
+/* =========================================================
+   DESKTOP IMAGE CONTENT
+   ========================================================= */
+
+.dish__overlay-content {
+  position: absolute;
+
+  left: clamp(18px, 2.2vw, 30px);
+  right: clamp(18px, 2.2vw, 30px);
+  bottom: clamp(20px, 2.5vw, 32px);
+
+  z-index: 3;
+
+  pointer-events: none;
+}
+
+.dish__meta {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 16px;
+
+  color: rgba(249, 246, 240, 0.82);
+
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+
+  line-height: 1.3;
+  letter-spacing: 1.8px;
+
+  text-transform: uppercase;
+}
+
+.dish__line {
+  display: block;
+
+  width: 42px;
+  height: 1px;
+
+  margin-top: 13px;
+
+  background: var(--color-accent);
+
+  transform-origin: left center;
+
+  transition:
+    width 0.7s var(--ease-luxury);
+}
+
+.dish__title {
+  margin: 12px 0 0;
+
+  max-width: 90%;
+
+  color: var(--color-text);
+
+  font-family: var(--font-display);
+  font-size: clamp(30px, 3vw, 46px);
+  font-weight: 400;
+
+  line-height: 0.96;
+  letter-spacing: -0.025em;
+
+  text-wrap: balance;
+}
+
+
+/* =========================================================
+   DESKTOP EXPLORE INDICATOR
+   ========================================================= */
+
+.dish__explore {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  z-index: 4;
+
+  display: flex;
+
+  align-items: center;
+  gap: 10px;
+
+  padding: 11px 16px;
+
+  border: 1px solid rgba(249, 246, 240, 0.38);
+
+  background: rgba(20, 18, 16, 0.24);
+
+  color: var(--color-text);
+
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+
+  line-height: 1.2;
+  letter-spacing: 1.6px;
+
+  text-transform: uppercase;
+
+  opacity: 0;
+
+  transform:
+    translate(-50%, calc(-50% + 10px));
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  transition:
+    opacity 0.5s var(--ease-luxury),
+    transform 0.6s var(--ease-luxury);
+}
+
+.dish__explore-arrow {
+  display: inline-block;
+
+  font-size: 14px;
+
+  transition:
+    transform 0.4s var(--ease-luxury);
+}
+
+
+/* =========================================================
+   DESKTOP / HOVER DEVICES
+   ========================================================= */
+
+@media (hover: hover) and (pointer: fine) {
+
+  .dish__link:hover .dish__image {
+    transform: scale(1.045);
   }
 
-  /* Desktop/tablet: true pinned horizontal scroll, JS-driven below */
-  @media (min-width: 769px) {
-    .horizontal-track {
-      flex-wrap: nowrap;
-    }
+  .dish__link:hover .dish__scrim {
+    opacity: 1;
   }
+
+  .dish__link:hover .dish__number {
+    color: var(--color-accent);
+
+    transform: translateY(-3px);
+  }
+
+  .dish__link:hover .dish__line {
+    width: 96px;
+  }
+
+  .dish__link:hover .dish__explore {
+    opacity: 1;
+
+    transform:
+      translate(-50%, -50%);
+  }
+
+  .dish__link:hover .dish__explore-arrow {
+    transform: translate(2px, -2px);
+  }
+}
+
+
+/* =========================================================
+   MOBILE DETAILS
+   Hidden on desktop because the information is placed
+   directly over the image.
+   ========================================================= */
+
+.dish__details {
+  display: none;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.portfolio__empty {
+  width: min(100%, 600px);
+
+  padding-block: 60px;
+
+  color: var(--color-text-muted);
+
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+
+  line-height: 1.7;
+}
+
+.portfolio__empty code {
+  color: var(--color-accent);
+
+  font-size: 0.9em;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.portfolio__footer {
+  display: flex;
+
+  align-items: center;
+  gap: 20px;
+
+  margin-top: 54px;
+}
+
+.portfolio__footer-line {
+  display: block;
+
+  width: 44px;
+  height: 1px;
+
+  flex: 0 0 auto;
+
+  background: var(--color-accent);
+}
+
+.portfolio__footer-link {
+  display: inline-flex;
+
+  align-items: center;
+  gap: 8px;
+
+  color: var(--color-text-muted);
+
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+
+  line-height: 1.3;
+  letter-spacing: 1.7px;
+
+  text-transform: uppercase;
+  text-decoration: none;
+
+  transition:
+    color 0.3s var(--ease-luxury),
+    gap 0.3s var(--ease-luxury);
+}
+
+.portfolio__footer-link:hover {
+  color: var(--color-accent);
+
+  gap: 12px;
+}
+
+
+/* =========================================================
+   KEYBOARD ACCESSIBILITY
+   ========================================================= */
+
+.dish__link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 6px;
+}
+
+.portfolio__link:focus-visible,
+.portfolio__footer-link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 5px;
+}
+
+
+/* =========================================================
+   DESKTOP / LARGE TABLET
+   ========================================================= */
+
+@media screen and (min-width: 769px) {
+
+  .portfolio__gallery {
+    height: 100vh;
+    height: 100dvh;
+
+    min-height: 620px;
+
+    display: flex;
+
+    align-items: center;
+
+    overflow: hidden;
+  }
+
+  .dish {
+    max-height: 76vh;
+  }
+
+  .dish__media {
+    max-height: 76vh;
+  }
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media screen and (max-width: 1024px) and (min-width: 769px) {
+
+  .portfolio__header {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(250px, 0.7fr);
+
+    gap: 48px;
+  }
+
+  .dish {
+    flex-basis: min(350px, 42vw);
+  }
+
+  .portfolio__track {
+    gap: 32px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+     
+   IMPORTANT:
+   Mobile completely abandons the desktop horizontal
+   gallery model.
+
+   No:
+   - pinning
+   - fixed gallery height
+   - horizontal transform
+   - max-height
+   - flex row
+
+   Instead:
+   - normal page flow
+   - one dish per row
+   - natural content height
+   ========================================================= */
+
+@media screen and (max-width: 768px) {
+
+  /* -------------------------------------------------------
+     SECTION
+     ------------------------------------------------------- */
+
+  .portfolio {
+    width: 100%;
+    max-width: 100%;
+
+    padding-top: 88px;
+    padding-bottom: 90px;
+
+    overflow: visible;
+  }
+
+
+  /* -------------------------------------------------------
+     HEADER
+     ------------------------------------------------------- */
+
+  .portfolio__header {
+    display: block;
+
+    width: 100%;
+    max-width: 100%;
+
+    box-sizing: border-box;
+
+    padding-inline: 16px;
+    padding-bottom: 44px;
+  }
+
+  .portfolio__heading {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .portfolio__heading h2 {
+    max-width: 100%;
+
+    font-size: clamp(40px, 11vw, 58px);
+
+    line-height: 0.94;
+  }
+
+  .portfolio__intro {
+    width: 100%;
+    max-width: 520px;
+
+    margin-top: 26px;
+  }
+
+  .portfolio__intro > p {
+    font-size: 14px;
+
+    line-height: 1.65;
+  }
+
+  .portfolio__link {
+    margin-top: 22px;
+  }
+
+
+  /* -------------------------------------------------------
+     GALLERY
+     ------------------------------------------------------- */
+
+  .portfolio__gallery {
+    position: relative;
+
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    min-height: 0;
+
+    overflow: visible;
+  }
+
+
+  /* -------------------------------------------------------
+     MOBILE STACK
+     ------------------------------------------------------- */
+
+  .portfolio__track {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 64px;
+
+    width: 100%;
+    max-width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 0 16px;
+    margin: 0;
+
+    transform: none !important;
+
+    will-change: auto;
+  }
+
+
+  /* -------------------------------------------------------
+     DISH
+     ------------------------------------------------------- */
+
+  .dish {
+    position: relative;
+
+    display: block;
+
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    height: auto;
+    min-height: 0;
+    max-height: none;
+
+    flex: 0 0 auto;
+
+    margin: 0;
+    padding: 0;
+
+    overflow: visible;
+  }
+
+
+  /* -------------------------------------------------------
+     LINK
+     ------------------------------------------------------- */
+
+  .dish__link {
+    position: relative;
+
+    display: block;
+
+    width: 100%;
+    max-width: 100%;
+
+    height: auto;
+
+    margin: 0;
+    padding: 0;
+
+    color: inherit;
+
+    text-decoration: none;
+
+    overflow: visible;
+  }
+
+
+  /* -------------------------------------------------------
+     IMAGE
+     ------------------------------------------------------- */
+
+  .dish__media {
+    position: relative;
+
+    display: block;
+
+    width: 100%;
+    max-width: 100%;
+
+    height: auto;
+
+    aspect-ratio: 4 / 5;
+
+    max-height: none;
+
+    overflow: hidden;
+
+    background: var(--color-surface);
+
+    border-radius: var(--radius-image);
+  }
+
+  .dish__image {
+    position: absolute;
+
+    inset: 0;
+
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+
+    transform: none;
+  }
+
+
+  /* -------------------------------------------------------
+     MOBILE IMAGE OVERLAY
+     ------------------------------------------------------- */
+
+  .dish__overlay-content,
+  .dish__explore {
+    display: none;
+  }
+
+
+  /* -------------------------------------------------------
+     NUMBER
+     ------------------------------------------------------- */
+
+  .dish__number {
+    position: absolute;
+
+    top: 16px;
+    left: 16px;
+
+    z-index: 3;
+
+    font-size: clamp(52px, 15vw, 76px);
+
+    line-height: 0.8;
+  }
+
+
+  /* -------------------------------------------------------
+     DETAILS
+     
+     This is normal document flow.
+     Nothing is positioned over the next dish.
+     ------------------------------------------------------- */
+
+  .dish__details {
+    position: static;
+
+    display: block;
+
+    width: 100%;
+    max-width: 100%;
+
+    height: auto;
+    min-height: 0;
+    max-height: none;
+
+    box-sizing: border-box;
+
+    padding: 16px 0 0;
+
+    overflow: visible;
+  }
+
+
+  /* -------------------------------------------------------
+     CATEGORY + YEAR
+     ------------------------------------------------------- */
+
+  .dish__details-top {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    max-width: 100%;
+
+    min-width: 0;
+
+    gap: 16px;
+  }
+
+  .dish__category {
+    display: block;
+
+    min-width: 0;
+
+    margin: 0;
+
+    overflow: hidden;
+
+    color: var(--color-accent);
+
+    font-family: var(--font-body);
+    font-size: 10px;
+    font-weight: 500;
+
+    line-height: 1.3;
+    letter-spacing: 1.7px;
+
+    text-overflow: ellipsis;
+
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .dish__year {
+    display: block;
+
+    flex: 0 0 auto;
+
+    margin: 0;
+
+    color: var(--color-text-muted);
+
+    font-family: var(--font-body);
+    font-size: 10px;
+    font-weight: 500;
+
+    line-height: 1.3;
+    letter-spacing: 1.7px;
+
+    text-transform: uppercase;
+  }
+
+
+  /* -------------------------------------------------------
+     MOBILE TITLE
+     ------------------------------------------------------- */
+
+  .dish__mobile-title {
+    position: static !important;
+
+    display: block;
+
+    width: 100%;
+    max-width: 100%;
+
+    height: auto;
+    min-height: 0;
+    max-height: none;
+
+    margin: 10px 0 0;
+    padding: 0;
+
+    overflow: visible;
+
+    color: var(--color-text);
+
+    font-family: var(--font-display);
+    font-size: clamp(34px, 9vw, 48px);
+    font-weight: 400;
+
+    line-height: 0.98;
+    letter-spacing: -0.025em;
+
+    text-align: left;
+
+    white-space: normal;
+
+    overflow-wrap: break-word;
+    word-break: normal;
+  }
+
+
+  /* -------------------------------------------------------
+     MOBILE FLAVOR NOTE
+     ------------------------------------------------------- */
+
+  .dish__note {
+    position: static !important;
+
+    display: block;
+
+    width: 100%;
+    max-width: 560px;
+
+    height: auto;
+    min-height: 0;
+    max-height: none;
+
+    margin: 12px 0 0;
+    padding: 0;
+
+    overflow: visible;
+
+    color: var(--color-text-muted);
+
+    font-family: var(--font-body);
+    font-size: 14px;
+
+    line-height: 1.65;
+
+    white-space: normal;
+
+    overflow-wrap: break-word;
+  }
+
+
+  /* -------------------------------------------------------
+     MOBILE ACTION
+     ------------------------------------------------------- */
+
+  .dish__mobile-action {
+    position: static;
+
+    display: inline-flex;
+
+    align-items: center;
+    gap: 8px;
+
+    margin-top: 16px;
+
+    color: var(--color-accent);
+
+    font-family: var(--font-body);
+    font-size: 10px;
+    font-weight: 500;
+
+    line-height: 1.3;
+    letter-spacing: 1.7px;
+
+    text-transform: uppercase;
+  }
+
+
+  /* -------------------------------------------------------
+     FOOTER
+     ------------------------------------------------------- */
+
+  .portfolio__footer {
+    display: flex;
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    margin-top: 56px;
+
+    padding-inline: 16px;
+  }
+}
+
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
+@media screen and (max-width: 480px) {
+
+  .portfolio {
+    padding-top: 80px;
+    padding-bottom: 84px;
+  }
+
+  .portfolio__header {
+    padding-inline: 16px;
+    padding-bottom: 40px;
+  }
+
+  .portfolio__heading .eyebrow {
+    margin-bottom: 14px;
+  }
+
+  .portfolio__heading h2 {
+    font-size: clamp(38px, 11vw, 50px);
+  }
+
+  .portfolio__intro {
+    margin-top: 24px;
+  }
+
+  .portfolio__intro > p {
+    font-size: 14px;
+  }
+
+  .portfolio__track {
+    gap: 56px;
+
+    padding-inline: 16px;
+  }
+
+  .dish__number {
+    top: 14px;
+    left: 14px;
+
+    font-size: 54px;
+  }
+
+  .dish__details {
+    padding-top: 15px;
+  }
+
+  .dish__mobile-title {
+    margin-top: 9px;
+
+    font-size: clamp(26px, 7vw, 42px);
+  }
+
+  .dish__note {
+    font-size: 13px;
+
+    line-height: 1.6;
+  }
+
+  .dish__mobile-action {
+    margin-top: 15px;
+  }
+
+  .portfolio__footer {
+    margin-top: 48px;
+
+    padding-inline: 12px;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   ========================================================= */
+
+@media screen and (max-width: 360px) {
+
+  .portfolio {
+    padding-top: 72px;
+  }
+
+  .portfolio__header {
+    padding-inline: 14px;
+  }
+
+  .portfolio__track {
+    gap: 52px;
+
+    padding-inline: 10px;
+  }
+
+  .portfolio__heading h2 {
+    font-size: 36px;
+  }
+
+  .dish__mobile-title {
+    font-size: 31px;
+  }
+
+  .dish__note {
+    font-size: 13px;
+  }
+
+  .portfolio__footer {
+    padding-inline: 10px;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .dish__image,
+  .dish__scrim,
+  .dish__number,
+  .dish__line,
+  .dish__explore,
+  .dish__explore-arrow,
+  .portfolio__link,
+  .portfolio__link-arrow,
+  .portfolio__footer-link {
+    transition: none !important;
+  }
+
+  .dish__image {
+    transform: none !important;
+  }
+}
 </style>
 
 <script>
-  // Pinned horizontal scroll — desktop/tablet only, reduced-motion respected.
-  // Lazy-initialized on first intersection so GSAP/ScrollTrigger cost is
-  // deferred until the section is actually near the viewport.
+
   const section = document.getElementById("portfolio");
-  const track = document.getElementById("horizontal-track");
+const gallery = section?.querySelector(".portfolio__gallery");
+const track = document.getElementById("portfolio-track");
 
-  let initialized = false;
+let initialized = false;
 
-  async function initGallery() {
-    if (initialized || !track) return;
-    initialized = true;
+async function initPortfolioGallery() {
+  if (initialized || !section || !gallery || !track) return;
 
-    const { gsap, ScrollTrigger, mm } = await import("../scripts/motion.js");
+  initialized = true;
 
-    mm.add(
-      {
-        isDesktop:
-          "(min-width: 769px) and (prefers-reduced-motion: no-preference)",
-      },
-      (context) => {
-        const { isDesktop } = context.conditions as { isDesktop: boolean };
-        if (!isDesktop) return;
+  const { gsap, mm } = await import("../scripts/motion.js");
 
-        const tween = gsap.to(track, {
-          x: () => -(track.scrollWidth - window.innerWidth + 64),
-          ease: "none",
-          scrollTrigger: {
-            trigger: section,
-            start: "top top-=210px",
-            pin: true,
-            scrub: 1,
-            invalidateOnRefresh: true,
-            end: () => "+=" + (track.scrollWidth - window.innerWidth),
-          },
-        });
+  mm.add(
+    {
+      desktop:
+        "(min-width: 769px) and (prefers-reduced-motion: no-preference)",
+    },
+    (context) => {
+      const { desktop } = context.conditions as {
+        desktop: boolean;
+      };
 
-        return () => tween.scrollTrigger?.kill();
-      },
-    );
-  }
+      if (!desktop) return;
 
-  if (section) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          initGallery();
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "200px" },
-    );
-    observer.observe(section);
-  }
+      const getDistance = () => {
+        return Math.max(
+          0,
+          track.scrollWidth - gallery.clientWidth
+        );
+      };
+
+      const tween = gsap.to(track, {
+        x: () => -getDistance(),
+
+        ease: "none",
+
+        scrollTrigger: {
+          trigger: gallery,
+
+          start: "top top",
+
+          pin: true,
+
+          scrub: 1,
+
+          invalidateOnRefresh: true,
+
+          end: () => `+=${getDistance()}`,
+        },
+      });
+
+      return () => {
+        tween.scrollTrigger?.kill();
+        tween.kill();
+      };
+    },
+  );
+}
+
+if (
+  gallery &&
+  track &&
+  "IntersectionObserver" in window
+) {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        initPortfolioGallery();
+        observer.disconnect();
+      }
+    },
+    {
+      rootMargin: "300px 0px",
+      threshold: 0,
+    },
+  );
+
+  observer.observe(gallery);
+} else {
+  initPortfolioGallery();
+}
 </script>
