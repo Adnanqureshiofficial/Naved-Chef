@@ -2,7 +2,8 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-const allDishes = (await getCollection('dishes')).sort((a, b) => a.data.order - b.data.order);
+const allDishes = (await getCollection('dishes'))
+  .sort((a, b) => a.data.order - b.data.order);
 
 const categories = [
   {
@@ -22,99 +23,1541 @@ const categories = [
     label: 'Viennoiserie'
   }
 ];
----
-<BaseLayout title="Culinary Portfolio — [Chef Full Name]" description="Full portfolio of signature pastry creations, organized by category.">
-  <section class="creations">
-    <div class="container">
-      <p class="eyebrow">Full Portfolio</p>
-      <h1 class="font-display">Signature Creations</h1>
 
-      <div class="creations__filters" role="tablist" aria-label="Filter by category">
-        <button class="filter-btn is-active" data-filter="all" role="tab" aria-selected="true">All</button>
-        {categories.map((c) => (
-          <button class="filter-btn" data-filter={c.slug} role="tab" aria-selected="false">{c.label}</button>
-        ))}
+const featuredDish =
+  allDishes.find((dish) => dish.data.featured) ?? allDishes[0];
+
+const archiveDishes = featuredDish
+  ? allDishes.filter((dish) => dish.id !== featuredDish.id)
+  : allDishes;
+
+const categoryCounts = categories.map((category) => ({
+  ...category,
+  count: allDishes.filter(
+    (dish) => dish.data.category === category.slug
+  ).length
+}));
+
+const currentYear = new Date().getFullYear();
+
+const categoryLabel = (slug: string) =>
+  categories.find((category) => category.slug === slug)?.label ?? slug;
+---
+
+<BaseLayout
+  title="Culinary Portfolio — [Chef Full Name]"
+  description="A visual archive of signature pastry, chocolate and bakery creations."
+>
+
+  <section class="creations">
+
+    <!-- =====================================================
+         INTRODUCTION
+         ===================================================== -->
+
+    <header class="creations__intro container">
+
+      <div class="creations__intro-top reveal">
+
+        <p class="eyebrow">
+          Creations / 01
+        </p>
+
+        <span class="creations__intro-line"></span>
+
+        <span class="creations__intro-meta">
+          Pastry &amp; Bakery
+        </span>
+
       </div>
-      <p class="creations__archive-hint">
-        Prefer a curated view? Browse by category:
-        {categories.map((c, i) => (
-          <>
-            {i > 0 && ' · '}
-            <a href={`/creations/${c.slug}`}>{c.label}</a>
-          </>
+
+
+      <div class="creations__intro-main">
+
+        <div class="creations__intro-heading reveal">
+
+          <h1 class="font-display">
+            A study
+            <em>in pastry.</em>
+          </h1>
+
+        </div>
+
+
+        <div class="creations__intro-copy reveal">
+
+          <p>
+            A visual archive of pastry, chocolate and bakery
+            work developed across professional kitchens.
+          </p>
+
+          <span class="creations__intro-rule"></span>
+
+          <div class="creations__stats">
+
+            <div class="creations__stat">
+              <strong>{String(categories.length).padStart(2, '0')}</strong>
+              <span>Categories</span>
+            </div>
+
+            <div class="creations__stat">
+              <strong>{String(allDishes.length).padStart(2, '0')}</strong>
+              <span>Creations</span>
+            </div>
+
+            <div class="creations__stat">
+              <strong>{allDishes.length ? `${Math.min(...allDishes.map((dish) => dish.data.year ?? currentYear))}—${currentYear}` : '—'}</strong>
+              <span>Archive</span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         FEATURED CREATION
+         ===================================================== -->
+
+    {featuredDish && (
+
+      <section class="creations__featured container reveal">
+
+        <div class="section-label">
+
+          <span>Selected work</span>
+
+          <span>01 / {String(allDishes.length).padStart(2, '0')}</span>
+
+        </div>
+
+
+        <a
+          href={`/creations/${featuredDish.id}`}
+          class="featured-creation"
+        >
+
+          <div class="featured-creation__image">
+
+            <img
+              src={featuredDish.data.heroImage}
+              alt={featuredDish.data.title}
+              loading="eager"
+            />
+
+            <span class="featured-creation__view">
+              <span>View creation</span>
+              <span aria-hidden="true">↗</span>
+            </span>
+
+          </div>
+
+
+          <div class="featured-creation__details">
+
+            <div class="featured-creation__category">
+
+              <span>
+                {categoryLabel(featuredDish.data.category)}
+              </span>
+
+              {featuredDish.data.year && (
+                <span>
+                  {featuredDish.data.year}
+                </span>
+              )}
+
+            </div>
+
+
+            <div class="featured-creation__title-row">
+
+              <h2 class="font-display">
+                {featuredDish.data.title}
+              </h2>
+
+              <span
+                class="featured-creation__arrow"
+                aria-hidden="true"
+              >
+                ↗
+              </span>
+
+            </div>
+
+          </div>
+
+        </a>
+
+      </section>
+
+    )}
+
+
+    <!-- =====================================================
+         CATEGORY INDEX
+         ===================================================== -->
+
+    <section
+      class="creations__index container reveal"
+      aria-label="Creation categories"
+    >
+
+      <div class="section-label">
+
+        <span>Archive</span>
+
+        <span>Browse by category</span>
+
+      </div>
+
+
+      <div
+        class="creations__filters"
+        role="tablist"
+        aria-label="Filter creations by category"
+      >
+
+        <button
+          class="filter-btn is-active"
+          data-filter="all"
+          role="tab"
+          aria-selected="true"
+        >
+          <span class="filter-btn__number">01</span>
+          <span class="filter-btn__label">All</span>
+          <span class="filter-btn__count">
+            {String(allDishes.length).padStart(2, '0')}
+          </span>
+        </button>
+
+
+        {categoryCounts.map((category, index) => (
+
+          <button
+            class="filter-btn"
+            data-filter={category.slug}
+            role="tab"
+            aria-selected="false"
+          >
+
+            <span class="filter-btn__number">
+              {String(index + 2).padStart(2, '0')}
+            </span>
+
+            <span class="filter-btn__label">
+              {category.label}
+            </span>
+
+            <span class="filter-btn__count">
+              {String(category.count).padStart(2, '0')}
+            </span>
+
+          </button>
+
         ))}
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         ARCHIVE GRID
+         ===================================================== -->
+
+    <section class="creations__archive container">
+
+      <div class="creations__archive-heading reveal">
+
+        <p class="eyebrow">
+          The archive
+        </p>
+
+        <p>
+          Selected pastry, chocolate and bakery work.
+        </p>
+
+      </div>
+
+
+      <div
+        class="creations__grid"
+        id="creations-grid"
+      >
+
+        {archiveDishes.map((dish, index) => (
+
+          <a
+            href={`/creations/${dish.id}`}
+            class:list={[
+              'dish-tile',
+              'reveal',
+              {
+                'dish-tile--large':
+                  index === 0 ||
+                  index === 5 ||
+                  index % 7 === 0
+              }
+            ]}
+            data-category={dish.data.category}
+          >
+
+            <div class="dish-tile__image">
+
+              <img
+                src={dish.data.heroImage}
+                alt={dish.data.title}
+                loading="lazy"
+              />
+
+              <span
+                class="dish-tile__view"
+                aria-hidden="true"
+              >
+                ↗
+              </span>
+
+            </div>
+
+
+            <div class="dish-tile__details">
+
+              <div class="dish-tile__meta">
+
+                <span>
+                  {String(index + 2).padStart(2, '0')}
+                </span>
+
+                <span>
+                  {categoryLabel(dish.data.category)}
+                </span>
+
+              </div>
+
+
+              <div class="dish-tile__title-row">
+
+                <h3 class="font-display">
+                  {dish.data.title}
+                </h3>
+
+                {dish.data.year && (
+                  <span class="dish-tile__year">
+                    {dish.data.year}
+                  </span>
+                )}
+
+              </div>
+
+            </div>
+
+          </a>
+
+        ))}
+
+      </div>
+
+
+      <p
+        class="creations__empty"
+        id="creations-empty"
+        hidden
+      >
+        No creations found in this category.
       </p>
 
-      <div class="creations__grid" id="creations-grid">
-        {allDishes.map((dish) => (
-          <a href={`/creations/${dish.id}`} class="dish-tile card" data-category={dish.data.category}>
-            <div class="dish-tile__image">
-              <img src={dish.data.heroImage} alt={dish.data.title} loading="lazy" />
-            </div>
-            <p class="eyebrow">{categories.find((c) => c.slug === dish.data.category)?.label}</p>
-            <h3>{dish.data.title}</h3>
-          </a>
-        ))}
-      </div>
+    </section>
 
-      {allDishes.length === 0 && (
-        <p class="creations__empty">No dishes yet — add entries to src/content/dishes/.</p>
-      )}
-    </div>
   </section>
+
 </BaseLayout>
 
-<style>
-  .creations { padding-top: 140px; padding-bottom: 100px; }
-  .creations h1 { font-size: var(--text-display); margin-top: 12px; }
-  .creations__filters { display: flex; gap: 12px; margin-top: 40px; flex-wrap: wrap; }
-  .filter-btn {
-    background: none;
-    border: 1px solid var(--color-border);
-    color: var(--color-text-muted);
-    padding: 8px 18px;
-    border-radius: 2px;
-    font-size: var(--text-caption);
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    cursor: pointer;
-    transition: all 0.3s var(--ease-luxury);
-  }
-  .filter-btn.is-active,
-  .filter-btn:hover { border-color: var(--color-accent); color: var(--color-accent); }
-  .creations__archive-hint { color: var(--color-text-muted); font-size: var(--text-caption); margin-top: 16px; }
-  .creations__archive-hint a { color: var(--color-accent); }
-  .creations__grid { display: grid; gap: 20px; margin-top: 48px; grid-template-columns: 1fr; }
-  .dish-tile { padding: 20px; }
-  .dish-tile__image { aspect-ratio: 4/5; background: var(--color-surface); margin-bottom: 16px; overflow: hidden; border-radius: var(--radius-image); }
-  .dish-tile__image img { width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
-  .dish-tile[hidden] { display: none; }
-  .creations__empty { color: var(--color-text-muted); margin-top: 40px; }
-
-  @media (min-width: 600px) {
-    .creations__grid { grid-template-columns: repeat(2, 1fr); }
-  }
-  @media (min-width: 1024px) {
-    .creations__grid { grid-template-columns: repeat(3, 1fr); }
-  }
-</style>
 
 <script>
-  // Simple client-side filter — no framework needed for this.
-  const buttons = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
-  const tiles = document.querySelectorAll<HTMLElement>('.dish-tile');
 
-  buttons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      buttons.forEach((b) => { b.classList.remove('is-active'); b.setAttribute('aria-selected', 'false'); });
-      btn.classList.add('is-active');
-      btn.setAttribute('aria-selected', 'true');
+  const buttons =
+    document.querySelectorAll<HTMLButtonElement>(
+      '.filter-btn'
+    );
 
-      const filter = btn.dataset.filter;
-      tiles.forEach((tile) => {
-        const match = filter === 'all' || tile.dataset.category === filter;
-        tile.hidden = !match;
-      });
-    });
+  const tiles =
+    document.querySelectorAll<HTMLElement>(
+      '.dish-tile'
+    );
+
+  const emptyState =
+    document.getElementById(
+      'creations-empty'
+    );
+
+
+  buttons.forEach((button) => {
+
+    button.addEventListener(
+      'click',
+      () => {
+
+        const filter =
+          button.dataset.filter ?? 'all';
+
+
+        /* ---------------------------------------------
+           Update active button
+        --------------------------------------------- */
+
+        buttons.forEach((item) => {
+
+          item.classList.remove(
+            'is-active'
+          );
+
+          item.setAttribute(
+            'aria-selected',
+            'false'
+          );
+
+        });
+
+
+        button.classList.add(
+          'is-active'
+        );
+
+        button.setAttribute(
+          'aria-selected',
+          'true'
+        );
+
+
+        /* ---------------------------------------------
+           Filter archive
+        --------------------------------------------- */
+
+        let visibleCount = 0;
+
+
+        tiles.forEach((tile) => {
+
+          const matches =
+            filter === 'all' ||
+            tile.dataset.category === filter;
+
+
+          tile.hidden = !matches;
+
+
+          if (matches) {
+            visibleCount++;
+          }
+
+        });
+
+
+        if (emptyState) {
+
+          emptyState.hidden =
+            visibleCount !== 0;
+
+        }
+
+      }
+    );
+
   });
+
 </script>
+
+
+<style>
+
+  /* =====================================================
+     PAGE
+     ===================================================== */
+
+  .creations {
+    padding-top: 140px;
+    padding-bottom: 140px;
+  }
+
+
+  /* =====================================================
+     INTRO
+     ===================================================== */
+
+  .creations__intro {
+    margin-bottom: 120px;
+  }
+
+
+  .creations__intro-top {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 20px;
+  }
+
+
+  .creations__intro-line {
+    height: 1px;
+    background: var(--color-border);
+  }
+
+
+  .creations__intro-meta {
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+
+  .creations__intro-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.6fr);
+    gap: clamp(40px, 10vw, 160px);
+    align-items: end;
+    margin-top: 48px;
+  }
+
+
+  .creations__intro-heading h1 {
+    max-width: 800px;
+    margin: 0;
+    font-size: clamp(72px, 11vw, 170px);
+    font-weight: 400;
+    line-height: 0.78;
+    letter-spacing: -0.045em;
+  }
+
+
+  .creations__intro-heading h1 em {
+    display: block;
+    color: var(--color-accent);
+    font-style: italic;
+    padding-left: clamp(30px, 8vw, 130px);
+  }
+
+
+  .creations__intro-copy {
+    max-width: 350px;
+    padding-bottom: 8px;
+  }
+
+
+  .creations__intro-copy > p {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+    font-size: 13px;
+    line-height: 1.8;
+  }
+
+
+  .creations__intro-rule {
+    display: block;
+    width: 100%;
+    height: 1px;
+    margin: 30px 0 24px;
+    background: var(--color-border);
+  }
+
+
+  .creations__stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+
+  .creations__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+
+  .creations__stat strong {
+    color: var(--color-text);
+    font-family: var(--font-display);
+    font-size: 23px;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+
+  .creations__stat span {
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+
+
+  /* =====================================================
+     SECTION LABEL
+     ===================================================== */
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding-bottom: 14px;
+
+    border-bottom:
+      1px solid
+      var(--color-border);
+
+    color:
+      var(--color-text-muted);
+
+    font-family:
+      var(--font-body);
+
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+
+  /* =====================================================
+     FEATURED
+     ===================================================== */
+
+  .creations__featured {
+    margin-bottom: 120px;
+  }
+
+
+  .featured-creation {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    margin-top: 28px;
+  }
+
+
+  .featured-creation__image {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 8.5;
+    background: var(--color-surface);
+  }
+
+
+  .featured-creation__image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+
+    transition:
+      transform 1s var(--ease-luxury);
+  }
+
+
+  .featured-creation:hover
+  .featured-creation__image img {
+    transform: scale(1.025);
+  }
+
+
+  .featured-creation__image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background:
+      linear-gradient(
+        to top,
+        rgba(20, 18, 16, 0.45),
+        transparent 45%
+      );
+
+    opacity: 0;
+
+    transition:
+      opacity 0.6s var(--ease-luxury);
+  }
+
+
+  .featured-creation:hover
+  .featured-creation__image::after {
+    opacity: 1;
+  }
+
+
+  .featured-creation__view {
+    position: absolute;
+    right: 24px;
+    bottom: 24px;
+
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    color: var(--color-text);
+
+    font-family: var(--font-body);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+
+    opacity: 0;
+    transform: translateY(8px);
+
+    transition:
+      opacity 0.4s var(--ease-luxury),
+      transform 0.5s var(--ease-luxury);
+  }
+
+
+  .featured-creation:hover
+  .featured-creation__view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+
+  .featured-creation__details {
+    padding-top: 18px;
+  }
+
+
+  .featured-creation__category {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+
+    color: var(--color-text-muted);
+
+    font-family: var(--font-body);
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+  }
+
+
+  .featured-creation__title-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 30px;
+
+    margin-top: 10px;
+  }
+
+
+  .featured-creation__title-row h2 {
+    margin: 0;
+
+    color: var(--color-text);
+
+    font-size:
+      clamp(34px, 5vw, 64px);
+
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: -0.025em;
+
+    transition:
+      color 0.35s var(--ease-luxury);
+  }
+
+
+  .featured-creation:hover
+  .featured-creation__title-row h2 {
+    color: var(--color-accent);
+  }
+
+
+  .featured-creation__arrow {
+    color: var(--color-accent);
+    font-size: 24px;
+
+    transition:
+      transform 0.4s var(--ease-luxury);
+  }
+
+
+  .featured-creation:hover
+  .featured-creation__arrow {
+    transform: translate(4px, -4px);
+  }
+
+
+  /* =====================================================
+     CATEGORY INDEX
+     ===================================================== */
+
+  .creations__index {
+    margin-bottom: 100px;
+  }
+
+
+  .creations__filters {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+  }
+
+
+  .filter-btn {
+    position: relative;
+
+    display: grid;
+    grid-template-columns: 50px 1fr auto;
+    align-items: center;
+
+    width: 100%;
+    min-height: 58px;
+
+    padding: 0;
+
+    border: 0;
+    border-bottom:
+      1px solid
+      var(--color-border);
+
+    background: transparent;
+
+    color:
+      var(--color-text-muted);
+
+    text-align: left;
+    cursor: pointer;
+
+    transition:
+      color 0.3s var(--ease-luxury),
+      padding-left 0.45s var(--ease-luxury);
+  }
+
+
+  .filter-btn::before {
+    content: "";
+
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+
+    width: 0;
+    height: 1px;
+
+    background:
+      var(--color-accent);
+
+    transition:
+      width 0.5s var(--ease-luxury);
+  }
+
+
+  .filter-btn__number,
+  .filter-btn__count {
+    font-family: var(--font-body);
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 1.3px;
+  }
+
+
+  .filter-btn__number {
+    color:
+      rgba(249, 246, 240, 0.35);
+  }
+
+
+  .filter-btn__count {
+    color:
+      rgba(249, 246, 240, 0.35);
+  }
+
+
+  .filter-btn__label {
+    font-family: var(--font-display);
+    font-size: 27px;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+
+  .filter-btn:hover,
+  .filter-btn.is-active {
+    color:
+      var(--color-accent);
+    padding-left: 8px;
+  }
+
+
+  .filter-btn.is-active::before,
+  .filter-btn:hover::before {
+    width: 100%;
+  }
+
+
+  .filter-btn.is-active
+  .filter-btn__number,
+  .filter-btn.is-active
+  .filter-btn__count {
+    color:
+      rgba(200, 169, 107, 0.7);
+  }
+
+
+  /* =====================================================
+     ARCHIVE
+     ===================================================== */
+
+  .creations__archive-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+
+    gap: 30px;
+
+    padding-bottom: 18px;
+
+    border-bottom:
+      1px solid
+      var(--color-border);
+  }
+
+
+  .creations__archive-heading p:last-child {
+    margin: 0;
+
+    color: var(--color-text-muted);
+
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 0.5px;
+  }
+
+
+  .creations__grid {
+    display: grid;
+
+    grid-template-columns:
+      repeat(12, minmax(0, 1fr));
+
+    gap:
+      clamp(28px, 4vw, 64px)
+      clamp(16px, 2vw, 32px);
+
+    margin-top: 48px;
+  }
+
+
+  /* =====================================================
+     DISH TILE
+     ===================================================== */
+
+  .dish-tile {
+    grid-column: span 4;
+
+    display: block;
+
+    min-width: 0;
+
+    color: inherit;
+    text-decoration: none;
+
+    transition:
+      opacity 0.35s ease;
+  }
+
+
+  .dish-tile--large {
+    grid-column: span 6;
+  }
+
+
+  .dish-tile__image {
+    position: relative;
+
+    overflow: hidden;
+
+    aspect-ratio: 4 / 5;
+
+    background:
+      var(--color-surface);
+  }
+
+
+  .dish-tile--large
+  .dish-tile__image {
+    aspect-ratio: 4 / 4.6;
+  }
+
+
+  .dish-tile__image img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    transition:
+      transform 0.9s var(--ease-luxury);
+  }
+
+
+  .dish-tile:hover
+  .dish-tile__image img {
+    transform: scale(1.035);
+  }
+
+
+  .dish-tile__image::after {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+      rgba(20, 18, 16, 0.18);
+
+    opacity: 0;
+
+    transition:
+      opacity 0.5s var(--ease-luxury);
+  }
+
+
+  .dish-tile:hover
+  .dish-tile__image::after {
+    opacity: 1;
+  }
+
+
+  .dish-tile__view {
+    position: absolute;
+
+    right: 16px;
+    bottom: 16px;
+
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 38px;
+    height: 38px;
+
+    border:
+      1px solid
+      rgba(249, 246, 240, 0.5);
+
+    color:
+      var(--color-text);
+
+    font-size: 15px;
+
+    opacity: 0;
+
+    transform:
+      translateY(8px);
+
+    transition:
+      opacity 0.4s var(--ease-luxury),
+      transform 0.4s var(--ease-luxury);
+  }
+
+
+  .dish-tile:hover
+  .dish-tile__view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+
+  /* =====================================================
+     TILE DETAILS
+     ===================================================== */
+
+  .dish-tile__details {
+    padding-top: 14px;
+  }
+
+
+  .dish-tile__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    color:
+      var(--color-text-muted);
+
+    font-family:
+      var(--font-body);
+
+    font-size: 7px;
+    font-weight: 600;
+
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+  }
+
+
+  .dish-tile__meta span:first-child {
+    color:
+      rgba(249, 246, 240, 0.3);
+  }
+
+
+  .dish-tile__title-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+
+    gap: 16px;
+
+    margin-top: 7px;
+  }
+
+
+  .dish-tile h3 {
+    margin: 0;
+
+    color:
+      var(--color-text);
+
+    font-size:
+      clamp(23px, 2.5vw, 34px);
+
+    font-weight: 400;
+
+    line-height: 0.95;
+
+    letter-spacing: -0.02em;
+
+    transition:
+      color 0.3s var(--ease-luxury);
+  }
+
+
+  .dish-tile:hover h3 {
+    color:
+      var(--color-accent);
+  }
+
+
+  .dish-tile__year {
+    flex-shrink: 0;
+
+    color:
+      var(--color-text-muted);
+
+    font-family:
+      var(--font-body);
+
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+
+
+  .dish-tile[hidden] {
+    display: none;
+  }
+
+
+  /* =====================================================
+     EMPTY
+     ===================================================== */
+
+  .creations__empty {
+    padding: 60px 0;
+
+    border-bottom:
+      1px solid
+      var(--color-border);
+
+    color:
+      var(--color-text-muted);
+
+    font-family:
+      var(--font-body);
+
+    font-size: 12px;
+  }
+
+
+  /* =====================================================
+     REVEAL
+     ===================================================== */
+
+  .reveal {
+    opacity: 0;
+    transform:
+      translateY(24px);
+
+    animation:
+      creationReveal 0.9s var(--ease-luxury)
+      forwards;
+  }
+
+
+  .creations__grid .reveal:nth-child(2) {
+    animation-delay: 0.08s;
+  }
+
+
+  .creations__grid .reveal:nth-child(3) {
+    animation-delay: 0.14s;
+  }
+
+
+  .creations__grid .reveal:nth-child(4) {
+    animation-delay: 0.2s;
+  }
+
+
+  .creations__grid .reveal:nth-child(5) {
+    animation-delay: 0.26s;
+  }
+
+
+  @keyframes creationReveal {
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+  }
+
+
+  /* =====================================================
+     TABLET
+     ===================================================== */
+
+  @media (max-width: 900px) {
+
+    .creations {
+      padding-top: 120px;
+    }
+
+
+    .creations__intro-main {
+      grid-template-columns: 1fr;
+      gap: 50px;
+    }
+
+
+    .creations__intro-copy {
+      max-width: 420px;
+      margin-left: auto;
+    }
+
+
+    .dish-tile,
+    .dish-tile--large {
+      grid-column: span 6;
+    }
+
+  }
+
+
+  /* =====================================================
+     MOBILE
+     ===================================================== */
+
+  @media (max-width: 640px) {
+
+    .creations {
+      padding-top: 110px;
+      padding-bottom: 90px;
+    }
+
+
+    .creations__intro {
+      margin-bottom: 80px;
+    }
+
+
+    .creations__intro-top {
+      grid-template-columns: auto 1fr;
+    }
+
+
+    .creations__intro-meta {
+      display: none;
+    }
+
+
+    .creations__intro-main {
+      margin-top: 38px;
+      gap: 42px;
+    }
+
+
+    .creations__intro-heading h1 {
+      font-size:
+        clamp(64px, 19vw, 100px);
+
+      line-height: 0.82;
+    }
+
+
+    .creations__intro-heading h1 em {
+      padding-left: 10vw;
+    }
+
+
+    .creations__intro-copy {
+      margin-left: 0;
+    }
+
+
+    .creations__stats {
+      gap: 10px;
+    }
+
+
+    .creations__featured {
+      margin-bottom: 80px;
+    }
+
+
+    .featured-creation__image {
+      aspect-ratio: 4 / 5;
+    }
+
+
+    .featured-creation__view {
+      opacity: 1;
+      transform: none;
+
+      right: 16px;
+      bottom: 16px;
+    }
+
+
+    .featured-creation__title-row h2 {
+      font-size: 36px;
+    }
+
+
+    .creations__index {
+      margin-bottom: 80px;
+    }
+
+
+    /*
+     * Horizontal category index
+     */
+
+    .creations__filters {
+      display: flex;
+      flex-direction: row;
+
+      width: calc(100% + 40px);
+
+      margin-left: -20px;
+
+      overflow-x: auto;
+
+      scrollbar-width: none;
+
+      border-bottom:
+        1px solid
+        var(--color-border);
+    }
+
+
+    .creations__filters::-webkit-scrollbar {
+      display: none;
+    }
+
+
+    .filter-btn {
+      flex:
+        0 0 auto;
+
+      width: auto;
+
+      min-height: 54px;
+
+      padding:
+        0 18px;
+
+      border-bottom: 0;
+
+      grid-template-columns:
+        auto auto auto;
+
+      gap: 9px;
+    }
+
+
+    .filter-btn:first-child {
+      padding-left: 20px;
+    }
+
+
+    .filter-btn::before {
+      bottom: 0;
+    }
+
+
+    .filter-btn__label {
+      font-size: 20px;
+      white-space: nowrap;
+    }
+
+
+    .filter-btn__number {
+      font-size: 7px;
+    }
+
+
+    .filter-btn__count {
+      font-size: 7px;
+    }
+
+
+    .creations__archive-heading {
+      display: block;
+    }
+
+
+    .creations__archive-heading p:last-child {
+      margin-top: 10px;
+    }
+
+
+    .creations__grid {
+      display: grid;
+
+      grid-template-columns: 1fr;
+
+      gap: 54px;
+
+      margin-top: 34px;
+    }
+
+
+    .dish-tile,
+    .dish-tile--large {
+      grid-column: auto;
+    }
+
+
+    .dish-tile__image,
+    .dish-tile--large .dish-tile__image {
+      aspect-ratio: 4 / 5;
+    }
+
+
+    /*
+     * Always show the view affordance on touch devices.
+     */
+
+    .dish-tile__view {
+      opacity: 1;
+      transform: none;
+    }
+
+
+    .dish-tile h3 {
+      font-size: 29px;
+    }
+
+  }
+
+
+  /* =====================================================
+     SMALL PHONES
+     ===================================================== */
+
+  @media (max-width: 380px) {
+
+    .creations {
+      padding-top: 96px;
+    }
+
+
+    .creations__intro-heading h1 {
+      font-size: 61px;
+    }
+
+
+    .creations__stats {
+      grid-template-columns:
+        repeat(2, 1fr);
+
+      row-gap: 24px;
+    }
+
+
+    .featured-creation__title-row h2 {
+      font-size: 32px;
+    }
+
+
+    .dish-tile h3 {
+      font-size: 26px;
+    }
+
+  }
+
+
+  /* =====================================================
+     ACCESSIBILITY
+     ===================================================== */
+
+  .filter-btn:focus-visible,
+  .featured-creation:focus-visible,
+  .dish-tile:focus-visible {
+    outline:
+      2px solid
+      var(--color-accent);
+
+    outline-offset: 5px;
+  }
+
+
+  /* =====================================================
+     REDUCED MOTION
+     ===================================================== */
+
+  @media (prefers-reduced-motion: reduce) {
+
+    .reveal {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+
+
+    .featured-creation__image img,
+    .dish-tile__image img,
+    .filter-btn,
+    .dish-tile,
+    .featured-creation__arrow {
+      transition: none !important;
+    }
+
+  }
+
+</style>
