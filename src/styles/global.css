@@ -27,7 +27,7 @@
 
   --text-body-lg: clamp(15px, 0.3vw + 14px, 18px);
   --text-body: clamp(14px, 0.15vw + 13px, 15px);
-  --text-caption: clamp(11px, 0.1vw + 10px, 12px);
+  --text-caption: clamp(11px, 0.1vw + 12px, 14px);
 
   --ease-luxury: cubic-bezier(0.16, 1, 0.3, 1);
 

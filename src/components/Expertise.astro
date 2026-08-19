@@ -133,7 +133,7 @@
     position: relative;
 
     padding-block:
-      clamp(90px, 12vw, 160px);
+      clamp(90px, 1vw, 160px);
 
     overflow: hidden;
   }
@@ -272,7 +272,7 @@
    */
   .expertise__item:hover {
     background: rgba(200, 169, 107, 0.025);
-
+border-left: 4px solid var(--color-accent);
     padding-left:
       clamp(14px, 2.5vw, 30px);
   }
@@ -351,7 +351,7 @@
 
     color: var(--color-accent);
 
-    font-size: 10px;
+    font-size: 20px;
 
     opacity: 0.45;
 
@@ -404,7 +404,7 @@
   @media (max-width: 640px) {
 
     .expertise {
-      padding-block: 88px;
+      padding-block: 40px;
     }
 
 
@@ -482,14 +482,16 @@
   @media (max-width: 400px) {
 
     .expertise {
-      padding-block: 72px;
+      padding-block: 20px;
     }
 
 
     .expertise__heading h2 {
       font-size: 34px;
     }
-
+.expertise__mark {
+  font-size: 14px;
+}
 
     .expertise__item {
       grid-template-columns:

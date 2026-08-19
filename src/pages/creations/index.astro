@@ -24,13 +24,6 @@ const categories = [
   }
 ];
 
-const featuredDish =
-  allDishes.find((dish) => dish.data.featured) ?? allDishes[0];
-
-const archiveDishes = featuredDish
-  ? allDishes.filter((dish) => dish.id !== featuredDish.id)
-  : allDishes;
-
 const categoryCounts = categories.map((category) => ({
   ...category,
   count: allDishes.filter(
@@ -38,15 +31,13 @@ const categoryCounts = categories.map((category) => ({
   ).length
 }));
 
-const currentYear = new Date().getFullYear();
-
 const categoryLabel = (slug: string) =>
   categories.find((category) => category.slug === slug)?.label ?? slug;
 ---
 
 <BaseLayout
-  title="Culinary Portfolio — [Chef Full Name]"
-  description="A visual archive of signature pastry, chocolate and bakery creations."
+  title="Creations — [Chef Full Name]"
+  description="Explore a collection of pastry, chocolate, cake, entremet and viennoiserie creations shaped by technique, flavour and contemporary presentation."
 >
 
   <section class="creations">
@@ -60,13 +51,13 @@ const categoryLabel = (slug: string) =>
       <div class="creations__intro-top reveal">
 
         <p class="eyebrow">
-          Creations / 01
+          Creations
         </p>
 
         <span class="creations__intro-line"></span>
 
         <span class="creations__intro-meta">
-          Pastry &amp; Bakery
+          Pastry · Chocolate · Bakery
         </span>
 
       </div>
@@ -77,8 +68,8 @@ const categoryLabel = (slug: string) =>
         <div class="creations__intro-heading reveal">
 
           <h1 class="font-display">
-            A study
-            <em>in pastry.</em>
+            Crafted with
+            <em>passion.</em>
           </h1>
 
         </div>
@@ -87,139 +78,24 @@ const categoryLabel = (slug: string) =>
         <div class="creations__intro-copy reveal">
 
           <p>
-            A visual archive of pastry, chocolate and bakery
-            work developed across professional kitchens.
+            A collection of pastry, chocolate and bakery creations developed
+            through professional kitchen experience, thoughtful flavour
+            combinations and a passion for refined presentation.
           </p>
 
-          <span class="creations__intro-rule"></span>
-
-          <div class="creations__stats">
-
-            <div class="creations__stat">
-              <strong>{String(categories.length).padStart(2, '0')}</strong>
-              <span>Categories</span>
-            </div>
-
-            <div class="creations__stat">
-              <strong>{String(allDishes.length).padStart(2, '0')}</strong>
-              <span>Creations</span>
-            </div>
-
-            <div class="creations__stat">
-              <strong>{allDishes.length ? `${Math.min(...allDishes.map((dish) => dish.data.year ?? currentYear))}—${currentYear}` : '—'}</strong>
-              <span>Archive</span>
-            </div>
-
-          </div>
-
         </div>
 
       </div>
 
-    </header>
 
+      <!-- =================================================
+           CATEGORY FILTER
+           ================================================= -->
 
-    <!-- =====================================================
-         FEATURED CREATION
-         ===================================================== -->
-
-    {featuredDish && (
-
-      <section class="creations__featured container reveal">
-
-        <div class="section-label">
-
-          <span>Selected work</span>
-
-          <span>01 / {String(allDishes.length).padStart(2, '0')}</span>
-
-        </div>
-
-
-        <a
-          href={`/creations/${featuredDish.id}`}
-          class="featured-creation"
-        >
-
-          <div class="featured-creation__image">
-
-            <img
-              src={featuredDish.data.heroImage}
-              alt={featuredDish.data.title}
-              loading="eager"
-            />
-
-            <span class="featured-creation__view">
-              <span>View creation</span>
-              <span aria-hidden="true">↗</span>
-            </span>
-
-          </div>
-
-
-          <div class="featured-creation__details">
-
-            <div class="featured-creation__category">
-
-              <span>
-                {categoryLabel(featuredDish.data.category)}
-              </span>
-
-              {featuredDish.data.year && (
-                <span>
-                  {featuredDish.data.year}
-                </span>
-              )}
-
-            </div>
-
-
-            <div class="featured-creation__title-row">
-
-              <h2 class="font-display">
-                {featuredDish.data.title}
-              </h2>
-
-              <span
-                class="featured-creation__arrow"
-                aria-hidden="true"
-              >
-                ↗
-              </span>
-
-            </div>
-
-          </div>
-
-        </a>
-
-      </section>
-
-    )}
-
-
-    <!-- =====================================================
-         CATEGORY INDEX
-         ===================================================== -->
-
-    <section
-      class="creations__index container reveal"
-      aria-label="Creation categories"
-    >
-
-      <div class="section-label">
-
-        <span>Archive</span>
-
-        <span>Browse by category</span>
-
-      </div>
-
-
-      <div
-        class="creations__filters"
-        role="tablist"
+      <nav
+        class="creations__filters reveal"
         aria-label="Filter creations by category"
+        role="tablist"
       >
 
         <button
@@ -228,15 +104,15 @@ const categoryLabel = (slug: string) =>
           role="tab"
           aria-selected="true"
         >
-          <span class="filter-btn__number">01</span>
-          <span class="filter-btn__label">All</span>
+          <span class="filter-btn__label">All Creations</span>
+
           <span class="filter-btn__count">
             {String(allDishes.length).padStart(2, '0')}
           </span>
         </button>
 
 
-        {categoryCounts.map((category, index) => (
+        {categoryCounts.map((category) => (
 
           <button
             class="filter-btn"
@@ -244,10 +120,6 @@ const categoryLabel = (slug: string) =>
             role="tab"
             aria-selected="false"
           >
-
-            <span class="filter-btn__number">
-              {String(index + 2).padStart(2, '0')}
-            </span>
 
             <span class="filter-btn__label">
               {category.label}
@@ -261,36 +133,26 @@ const categoryLabel = (slug: string) =>
 
         ))}
 
-      </div>
+      </nav>
 
-    </section>
+    </header>
 
 
     <!-- =====================================================
-         ARCHIVE GRID
+         CREATIONS GRID
          ===================================================== -->
 
-    <section class="creations__archive container">
-
-      <div class="creations__archive-heading reveal">
-
-        <p class="eyebrow">
-          The archive
-        </p>
-
-        <p>
-          Selected pastry, chocolate and bakery work.
-        </p>
-
-      </div>
-
+    <section
+      class="creations__archive container"
+      aria-label="Chef's creations"
+    >
 
       <div
         class="creations__grid"
         id="creations-grid"
       >
 
-        {archiveDishes.map((dish, index) => (
+        {allDishes.map((dish, index) => (
 
           <a
             href={`/creations/${dish.id}`}
@@ -298,10 +160,18 @@ const categoryLabel = (slug: string) =>
               'dish-tile',
               'reveal',
               {
+                /*
+                 * Maintain the original 12-column system:
+                 * regular = 4 columns
+                 * large   = 6 columns
+                 *
+                 * The pattern is made more deliberate so
+                 * the visual rhythm feels less random.
+                 */
                 'dish-tile--large':
                   index === 0 ||
                   index === 5 ||
-                  index % 7 === 0
+                  index === 10
               }
             ]}
             data-category={dish.data.category}
@@ -330,27 +200,30 @@ const categoryLabel = (slug: string) =>
               <div class="dish-tile__meta">
 
                 <span>
-                  {String(index + 2).padStart(2, '0')}
-                </span>
-
-                <span>
                   {categoryLabel(dish.data.category)}
                 </span>
+
+                {dish.data.year && (
+                  <span>
+                    {dish.data.year}
+                  </span>
+                )}
 
               </div>
 
 
               <div class="dish-tile__title-row">
 
-                <h3 class="font-display">
+                <h2 class="font-display">
                   {dish.data.title}
-                </h3>
+                </h2>
 
-                {dish.data.year && (
-                  <span class="dish-tile__year">
-                    {dish.data.year}
-                  </span>
-                )}
+                <span
+                  class="dish-tile__arrow"
+                  aria-hidden="true"
+                >
+                  ↗
+                </span>
 
               </div>
 
@@ -407,7 +280,7 @@ const categoryLabel = (slug: string) =>
 
 
         /* ---------------------------------------------
-           Update active button
+           Update active filter
         --------------------------------------------- */
 
         buttons.forEach((item) => {
@@ -435,7 +308,7 @@ const categoryLabel = (slug: string) =>
 
 
         /* ---------------------------------------------
-           Filter archive
+           Filter creations
         --------------------------------------------- */
 
         let visibleCount = 0;
@@ -457,6 +330,10 @@ const categoryLabel = (slug: string) =>
 
         });
 
+
+        /* ---------------------------------------------
+           Empty state
+        --------------------------------------------- */
 
         if (emptyState) {
 
@@ -490,7 +367,7 @@ const categoryLabel = (slug: string) =>
      ===================================================== */
 
   .creations__intro {
-    margin-bottom: 120px;
+    margin-bottom: 100px;
   }
 
 
@@ -521,318 +398,120 @@ const categoryLabel = (slug: string) =>
 
   .creations__intro-main {
     display: grid;
-    grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.6fr);
+    grid-template-columns:
+      minmax(0, 1.35fr)
+      minmax(260px, 0.65fr);
+
     gap: clamp(40px, 10vw, 160px);
+
     align-items: end;
+
     margin-top: 48px;
   }
 
 
   .creations__intro-heading h1 {
-    max-width: 800px;
+    max-width: 850px;
+
     margin: 0;
-    font-size: clamp(72px, 11vw, 170px);
+
+    font-size:
+      clamp(72px, 11vw, 170px);
+
     font-weight: 400;
+
     line-height: 0.78;
+
     letter-spacing: -0.045em;
   }
 
 
   .creations__intro-heading h1 em {
     display: block;
+
+    padding-left:
+      clamp(30px, 8vw, 130px);
+
     color: var(--color-accent);
+
     font-style: italic;
-    padding-left: clamp(30px, 8vw, 130px);
   }
 
 
   .creations__intro-copy {
-    max-width: 350px;
-    padding-bottom: 8px;
+    max-width: 360px;
+
+    padding-bottom: 6px;
   }
 
 
-  .creations__intro-copy > p {
+  .creations__intro-copy p {
     margin: 0;
+
     color: var(--color-text-muted);
+
     font-family: var(--font-body);
+
     font-size: 13px;
-    line-height: 1.8;
-  }
 
-
-  .creations__intro-rule {
-    display: block;
-    width: 100%;
-    height: 1px;
-    margin: 30px 0 24px;
-    background: var(--color-border);
-  }
-
-
-  .creations__stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-  }
-
-
-  .creations__stat {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-  }
-
-
-  .creations__stat strong {
-    color: var(--color-text);
-    font-family: var(--font-display);
-    font-size: 23px;
-    font-weight: 400;
-    line-height: 1;
-  }
-
-
-  .creations__stat span {
-    color: var(--color-text-muted);
-    font-family: var(--font-body);
-    font-size: 8px;
-    font-weight: 600;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
+    line-height: 1.85;
   }
 
 
   /* =====================================================
-     SECTION LABEL
+     CATEGORY FILTER
      ===================================================== */
 
-  .section-label {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+  .creations__filters {
 
-    padding-bottom: 14px;
+    display: flex;
+    align-items: stretch;
+
+    width: 100%;
+
+    margin-top: 72px;
+
+    overflow-x: auto;
+
+    scrollbar-width: none;
+
+    border-top:
+      1px solid
+      var(--color-border);
 
     border-bottom:
       1px solid
       var(--color-border);
 
-    color:
-      var(--color-text-muted);
-
-    font-family:
-      var(--font-body);
-
-    font-size: 8px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    line-height: 1;
-    text-transform: uppercase;
   }
 
 
-  /* =====================================================
-     FEATURED
-     ===================================================== */
-
-  .creations__featured {
-    margin-bottom: 120px;
-  }
-
-
-  .featured-creation {
-    display: block;
-    color: inherit;
-    text-decoration: none;
-    margin-top: 28px;
-  }
-
-
-  .featured-creation__image {
-    position: relative;
-    overflow: hidden;
-    aspect-ratio: 16 / 8.5;
-    background: var(--color-surface);
-  }
-
-
-  .featured-creation__image img {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-
-    transition:
-      transform 1s var(--ease-luxury);
-  }
-
-
-  .featured-creation:hover
-  .featured-creation__image img {
-    transform: scale(1.025);
-  }
-
-
-  .featured-creation__image::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-
-    background:
-      linear-gradient(
-        to top,
-        rgba(20, 18, 16, 0.45),
-        transparent 45%
-      );
-
-    opacity: 0;
-
-    transition:
-      opacity 0.6s var(--ease-luxury);
-  }
-
-
-  .featured-creation:hover
-  .featured-creation__image::after {
-    opacity: 1;
-  }
-
-
-  .featured-creation__view {
-    position: absolute;
-    right: 24px;
-    bottom: 24px;
-
-    z-index: 2;
-
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    color: var(--color-text);
-
-    font-family: var(--font-body);
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-
-    opacity: 0;
-    transform: translateY(8px);
-
-    transition:
-      opacity 0.4s var(--ease-luxury),
-      transform 0.5s var(--ease-luxury);
-  }
-
-
-  .featured-creation:hover
-  .featured-creation__view {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-
-  .featured-creation__details {
-    padding-top: 18px;
-  }
-
-
-  .featured-creation__category {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-
-    color: var(--color-text-muted);
-
-    font-family: var(--font-body);
-    font-size: 8px;
-    font-weight: 600;
-    letter-spacing: 1.4px;
-    text-transform: uppercase;
-  }
-
-
-  .featured-creation__title-row {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 30px;
-
-    margin-top: 10px;
-  }
-
-
-  .featured-creation__title-row h2 {
-    margin: 0;
-
-    color: var(--color-text);
-
-    font-size:
-      clamp(34px, 5vw, 64px);
-
-    font-weight: 400;
-    line-height: 0.95;
-    letter-spacing: -0.025em;
-
-    transition:
-      color 0.35s var(--ease-luxury);
-  }
-
-
-  .featured-creation:hover
-  .featured-creation__title-row h2 {
-    color: var(--color-accent);
-  }
-
-
-  .featured-creation__arrow {
-    color: var(--color-accent);
-    font-size: 24px;
-
-    transition:
-      transform 0.4s var(--ease-luxury);
-  }
-
-
-  .featured-creation:hover
-  .featured-creation__arrow {
-    transform: translate(4px, -4px);
-  }
-
-
-  /* =====================================================
-     CATEGORY INDEX
-     ===================================================== */
-
-  .creations__index {
-    margin-bottom: 100px;
-  }
-
-
-  .creations__filters {
-    display: flex;
-    flex-direction: column;
-    margin-top: 0;
+  .creations__filters::-webkit-scrollbar {
+    display: none;
   }
 
 
   .filter-btn {
+
     position: relative;
 
-    display: grid;
-    grid-template-columns: 50px 1fr auto;
+    flex:
+      1 0 auto;
+
+    display: flex;
     align-items: center;
+    justify-content: space-between;
 
-    width: 100%;
-    min-height: 58px;
+    gap: 24px;
 
-    padding: 0;
+    min-height: 62px;
+
+    padding:
+      0 24px;
 
     border: 0;
-    border-bottom:
+
+    border-right:
       1px solid
       var(--color-border);
 
@@ -841,116 +520,128 @@ const categoryLabel = (slug: string) =>
     color:
       var(--color-text-muted);
 
+    font: inherit;
+
     text-align: left;
+
     cursor: pointer;
+
+    white-space: nowrap;
 
     transition:
       color 0.3s var(--ease-luxury),
-      padding-left 0.45s var(--ease-luxury);
+      background 0.35s var(--ease-luxury);
   }
 
 
-  .filter-btn::before {
+  .filter-btn:first-child {
+    padding-left: 0;
+  }
+
+
+  .filter-btn:last-child {
+    border-right: 0;
+  }
+
+
+  .filter-btn::after {
+
     content: "";
 
     position: absolute;
+
     left: 0;
     bottom: -1px;
 
     width: 0;
-    height: 1px;
+    height: 2px;
 
     background:
       var(--color-accent);
 
     transition:
-      width 0.5s var(--ease-luxury);
-  }
-
-
-  .filter-btn__number,
-  .filter-btn__count {
-    font-family: var(--font-body);
-    font-size: 8px;
-    font-weight: 600;
-    letter-spacing: 1.3px;
-  }
-
-
-  .filter-btn__number {
-    color:
-      rgba(249, 246, 240, 0.35);
-  }
-
-
-  .filter-btn__count {
-    color:
-      rgba(249, 246, 240, 0.35);
+      width 0.45s var(--ease-luxury);
   }
 
 
   .filter-btn__label {
-    font-family: var(--font-display);
-    font-size: 27px;
+
+    font-family:
+      var(--font-display);
+
+    font-size: 21px;
+
     font-weight: 400;
+
     line-height: 1;
+
+    transition:
+      transform 0.35s var(--ease-luxury);
+  }
+
+
+  .filter-btn__count {
+
+    color:
+      rgba(249, 246, 240, 0.35);
+
+    font-family:
+      var(--font-body);
+
+    font-size: 8px;
+
+    font-weight: 600;
+
+    letter-spacing: 1.3px;
   }
 
 
   .filter-btn:hover,
   .filter-btn.is-active {
+
     color:
       var(--color-accent);
-    padding-left: 8px;
+
   }
 
 
-  .filter-btn.is-active::before,
-  .filter-btn:hover::before {
+  .filter-btn:hover::after,
+  .filter-btn.is-active::after {
+
     width: 100%;
+
   }
 
 
-  .filter-btn.is-active
-  .filter-btn__number,
+  .filter-btn:hover
+  .filter-btn__label {
+
+    transform:
+      translateX(4px);
+
+  }
+
+
   .filter-btn.is-active
   .filter-btn__count {
+
     color:
-      rgba(200, 169, 107, 0.7);
+      rgba(200, 169, 107, 0.75);
+
   }
 
 
   /* =====================================================
-     ARCHIVE
+     CREATIONS GRID
      ===================================================== */
 
-  .creations__archive-heading {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-
-    gap: 30px;
-
-    padding-bottom: 18px;
-
-    border-bottom:
-      1px solid
-      var(--color-border);
-  }
-
-
-  .creations__archive-heading p:last-child {
-    margin: 0;
-
-    color: var(--color-text-muted);
-
-    font-family: var(--font-body);
-    font-size: 10px;
-    letter-spacing: 0.5px;
+  .creations__archive {
+    margin-top: 0;
   }
 
 
   .creations__grid {
+
     display: grid;
 
     grid-template-columns:
@@ -960,7 +651,13 @@ const categoryLabel = (slug: string) =>
       clamp(28px, 4vw, 64px)
       clamp(16px, 2vw, 32px);
 
-    margin-top: 48px;
+    margin-top: 72px;
+
+    /*
+     * Keeps the existing 12-column layout while allowing
+     * suitable tiles to fill available grid space.
+     */
+    grid-auto-flow: dense;
   }
 
 
@@ -969,13 +666,16 @@ const categoryLabel = (slug: string) =>
      ===================================================== */
 
   .dish-tile {
-    grid-column: span 4;
+
+    grid-column:
+      span 4;
 
     display: block;
 
     min-width: 0;
 
     color: inherit;
+
     text-decoration: none;
 
     transition:
@@ -984,16 +684,21 @@ const categoryLabel = (slug: string) =>
 
 
   .dish-tile--large {
-    grid-column: span 6;
+
+    grid-column:
+      span 6;
+
   }
 
 
   .dish-tile__image {
+
     position: relative;
 
     overflow: hidden;
 
-    aspect-ratio: 4 / 5;
+    aspect-ratio:
+      4 / 5;
 
     background:
       var(--color-surface);
@@ -1002,11 +707,15 @@ const categoryLabel = (slug: string) =>
 
   .dish-tile--large
   .dish-tile__image {
-    aspect-ratio: 4 / 4.6;
+
+    aspect-ratio:
+      4 / 4.6;
+
   }
 
 
   .dish-tile__image img {
+
     width: 100%;
     height: 100%;
 
@@ -1016,38 +725,52 @@ const categoryLabel = (slug: string) =>
 
     transition:
       transform 0.9s var(--ease-luxury);
+
   }
 
 
   .dish-tile:hover
   .dish-tile__image img {
-    transform: scale(1.035);
+
+    transform:
+      scale(1.035);
+
   }
 
 
   .dish-tile__image::after {
+
     content: "";
 
     position: absolute;
+
     inset: 0;
 
     background:
-      rgba(20, 18, 16, 0.18);
+      rgba(20, 18, 16, 0.2);
 
     opacity: 0;
 
     transition:
       opacity 0.5s var(--ease-luxury);
+
   }
 
 
   .dish-tile:hover
   .dish-tile__image::after {
+
     opacity: 1;
+
   }
 
 
+  /* =====================================================
+     VIEW AFFORDANCE
+     ===================================================== */
+
   .dish-tile__view {
+
     position: absolute;
 
     right: 16px;
@@ -1056,7 +779,9 @@ const categoryLabel = (slug: string) =>
     z-index: 2;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
     width: 38px;
@@ -1064,7 +789,7 @@ const categoryLabel = (slug: string) =>
 
     border:
       1px solid
-      rgba(249, 246, 240, 0.5);
+      rgba(249, 246, 240, 0.55);
 
     color:
       var(--color-text);
@@ -1084,8 +809,12 @@ const categoryLabel = (slug: string) =>
 
   .dish-tile:hover
   .dish-tile__view {
+
     opacity: 1;
-    transform: translateY(0);
+
+    transform:
+      translateY(0);
+
   }
 
 
@@ -1094,16 +823,21 @@ const categoryLabel = (slug: string) =>
      ===================================================== */
 
   .dish-tile__details {
-    padding-top: 14px;
+
+    padding-top: 15px;
+
   }
 
 
   .dish-tile__meta {
+
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
 
-    gap: 12px;
+    gap: 16px;
 
     color:
       var(--color-text-muted);
@@ -1112,31 +846,40 @@ const categoryLabel = (slug: string) =>
       var(--font-body);
 
     font-size: 7px;
+
     font-weight: 600;
 
     letter-spacing: 1.3px;
+
     text-transform: uppercase;
   }
 
 
   .dish-tile__meta span:first-child {
+
     color:
-      rgba(249, 246, 240, 0.3);
+      rgba(249, 246, 240, 0.55);
+
   }
 
 
   .dish-tile__title-row {
+
     display: flex;
+
     align-items: baseline;
+
     justify-content: space-between;
 
     gap: 16px;
 
-    margin-top: 7px;
+    margin-top: 8px;
+
   }
 
 
-  .dish-tile h3 {
+  .dish-tile h2 {
+
     margin: 0;
 
     color:
@@ -1153,40 +896,58 @@ const categoryLabel = (slug: string) =>
 
     transition:
       color 0.3s var(--ease-luxury);
+
   }
 
 
-  .dish-tile:hover h3 {
+  .dish-tile:hover h2 {
+
     color:
       var(--color-accent);
+
   }
 
 
-  .dish-tile__year {
+  .dish-tile__arrow {
+
     flex-shrink: 0;
 
     color:
-      var(--color-text-muted);
+      var(--color-accent);
 
-    font-family:
-      var(--font-body);
+    font-size: 17px;
 
-    font-size: 8px;
-    letter-spacing: 1px;
+    opacity: 0;
+
+    transform:
+      translate(-4px, 4px);
+
+    transition:
+      opacity 0.35s var(--ease-luxury),
+      transform 0.35s var(--ease-luxury);
+
   }
 
 
-  .dish-tile[hidden] {
-    display: none;
+  .dish-tile:hover
+  .dish-tile__arrow {
+
+    opacity: 1;
+
+    transform:
+      translate(0, 0);
+
   }
 
 
   /* =====================================================
-     EMPTY
+     EMPTY STATE
      ===================================================== */
 
   .creations__empty {
-    padding: 60px 0;
+
+    padding:
+      60px 0;
 
     border-bottom:
       1px solid
@@ -1199,6 +960,7 @@ const categoryLabel = (slug: string) =>
       var(--font-body);
 
     font-size: 12px;
+
   }
 
 
@@ -1207,41 +969,75 @@ const categoryLabel = (slug: string) =>
      ===================================================== */
 
   .reveal {
+
     opacity: 0;
+
     transform:
       translateY(24px);
 
     animation:
-      creationReveal 0.9s var(--ease-luxury)
+      creationReveal
+      0.9s
+      var(--ease-luxury)
       forwards;
+
   }
 
 
-  .creations__grid .reveal:nth-child(2) {
-    animation-delay: 0.08s;
+  .creations__grid
+  .reveal:nth-child(2) {
+
+    animation-delay:
+      0.08s;
+
   }
 
 
-  .creations__grid .reveal:nth-child(3) {
-    animation-delay: 0.14s;
+  .creations__grid
+  .reveal:nth-child(3) {
+
+    animation-delay:
+      0.14s;
+
   }
 
 
-  .creations__grid .reveal:nth-child(4) {
-    animation-delay: 0.2s;
+  .creations__grid
+  .reveal:nth-child(4) {
+
+    animation-delay:
+      0.20s;
+
   }
 
 
-  .creations__grid .reveal:nth-child(5) {
-    animation-delay: 0.26s;
+  .creations__grid
+  .reveal:nth-child(5) {
+
+    animation-delay:
+      0.26s;
+
+  }
+
+
+  .creations__grid
+  .reveal:nth-child(6) {
+
+    animation-delay:
+      0.32s;
+
   }
 
 
   @keyframes creationReveal {
 
     to {
+
       opacity: 1;
-      transform: translateY(0);
+
+      transform:
+        translateY(0);
+
     }
 
   }
@@ -1254,25 +1050,68 @@ const categoryLabel = (slug: string) =>
   @media (max-width: 900px) {
 
     .creations {
-      padding-top: 120px;
+
+      padding-top:
+        120px;
+
     }
 
 
     .creations__intro-main {
-      grid-template-columns: 1fr;
-      gap: 50px;
+
+      grid-template-columns:
+        1fr;
+
+      gap:
+        42px;
+
     }
 
 
     .creations__intro-copy {
-      max-width: 420px;
-      margin-left: auto;
+
+      max-width:
+        420px;
+
+      margin-left:
+        auto;
+
+    }
+
+
+    .creations__filters {
+
+      margin-top:
+        60px;
+
+    }
+
+
+    .filter-btn {
+
+      flex:
+        0 0 auto;
+
+      padding:
+        0 22px;
+
+    }
+
+
+    .filter-btn:first-child {
+
+      padding-left:
+        0;
+
     }
 
 
     .dish-tile,
     .dish-tile--large {
-      grid-column: span 6;
+
+      grid-column:
+        span 6;
+
     }
 
   }
@@ -1285,202 +1124,227 @@ const categoryLabel = (slug: string) =>
   @media (max-width: 640px) {
 
     .creations {
-      padding-top: 110px;
-      padding-bottom: 90px;
+
+      padding-top:
+        110px;
+
+      padding-bottom:
+        90px;
+
     }
 
 
     .creations__intro {
-      margin-bottom: 80px;
+
+      margin-bottom:
+        0;
+
     }
 
 
     .creations__intro-top {
-      grid-template-columns: auto 1fr;
+
+      grid-template-columns:
+        auto 1fr;
+
     }
 
 
     .creations__intro-meta {
-      display: none;
+
+      display:
+        none;
+
     }
 
 
     .creations__intro-main {
-      margin-top: 38px;
-      gap: 42px;
+
+      margin-top:
+        38px;
+
+      gap:
+        34px;
+
     }
 
 
     .creations__intro-heading h1 {
+
       font-size:
         clamp(64px, 19vw, 100px);
 
-      line-height: 0.82;
+      line-height:
+        0.82;
+
     }
 
 
     .creations__intro-heading h1 em {
-      padding-left: 10vw;
+
+      padding-left:
+        10vw;
+
     }
 
 
     .creations__intro-copy {
-      margin-left: 0;
-    }
 
+      margin-left:
+        0;
 
-    .creations__stats {
-      gap: 10px;
-    }
-
-
-    .creations__featured {
-      margin-bottom: 80px;
-    }
-
-
-    .featured-creation__image {
-      aspect-ratio: 4 / 5;
-    }
-
-
-    .featured-creation__view {
-      opacity: 1;
-      transform: none;
-
-      right: 16px;
-      bottom: 16px;
-    }
-
-
-    .featured-creation__title-row h2 {
-      font-size: 36px;
-    }
-
-
-    .creations__index {
-      margin-bottom: 80px;
     }
 
 
     /*
-     * Horizontal category index
+     * Horizontal category navigation
      */
 
     .creations__filters {
-      display: flex;
-      flex-direction: row;
 
-      width: calc(100% + 40px);
+      width:
+        calc(100% + 40px);
 
-      margin-left: -20px;
+      margin-left:
+        -20px;
 
-      overflow-x: auto;
+      margin-top:
+        46px;
 
-      scrollbar-width: none;
+      overflow-x:
+        auto;
+
+      border-top:
+        1px solid
+        var(--color-border);
 
       border-bottom:
         1px solid
         var(--color-border);
-    }
 
-
-    .creations__filters::-webkit-scrollbar {
-      display: none;
     }
 
 
     .filter-btn {
-      flex:
-        0 0 auto;
 
-      width: auto;
-
-      min-height: 54px;
+      min-height:
+        54px;
 
       padding:
         0 18px;
 
-      border-bottom: 0;
+      border-right:
+        0;
 
-      grid-template-columns:
-        auto auto auto;
+      gap:
+        9px;
 
-      gap: 9px;
     }
 
 
     .filter-btn:first-child {
-      padding-left: 20px;
+
+      padding-left:
+        20px;
+
     }
 
 
-    .filter-btn::before {
-      bottom: 0;
+    .filter-btn:last-child {
+
+      padding-right:
+        20px;
+
     }
 
 
     .filter-btn__label {
-      font-size: 20px;
-      white-space: nowrap;
-    }
 
+      font-size:
+        20px;
 
-    .filter-btn__number {
-      font-size: 7px;
+      white-space:
+        nowrap;
+
     }
 
 
     .filter-btn__count {
-      font-size: 7px;
-    }
 
+      font-size:
+        7px;
 
-    .creations__archive-heading {
-      display: block;
-    }
-
-
-    .creations__archive-heading p:last-child {
-      margin-top: 10px;
     }
 
 
     .creations__grid {
-      display: grid;
 
-      grid-template-columns: 1fr;
+      grid-template-columns:
+        1fr;
 
-      gap: 54px;
+      gap:
+        54px;
 
-      margin-top: 34px;
+      margin-top:
+        48px;
+
+      grid-auto-flow:
+        row;
+
     }
 
 
     .dish-tile,
     .dish-tile--large {
-      grid-column: auto;
+
+      grid-column:
+        auto;
+
     }
 
 
     .dish-tile__image,
-    .dish-tile--large .dish-tile__image {
-      aspect-ratio: 4 / 5;
+    .dish-tile--large
+    .dish-tile__image {
+
+      aspect-ratio:
+        4 / 5;
+
     }
 
 
     /*
-     * Always show the view affordance on touch devices.
+     * Always show the interaction affordance
+     * on touch devices.
      */
 
     .dish-tile__view {
-      opacity: 1;
-      transform: none;
+
+      opacity:
+        1;
+
+      transform:
+        none;
+
     }
 
 
-    .dish-tile h3 {
-      font-size: 29px;
+    .dish-tile__arrow {
+
+      opacity:
+        1;
+
+      transform:
+        none;
+
+    }
+
+
+    .dish-tile h2 {
+
+      font-size:
+        29px;
+
     }
 
   }
@@ -1493,30 +1357,26 @@ const categoryLabel = (slug: string) =>
   @media (max-width: 380px) {
 
     .creations {
-      padding-top: 96px;
+
+      padding-top:
+        96px;
+
     }
 
 
     .creations__intro-heading h1 {
-      font-size: 61px;
+
+      font-size:
+        61px;
+
     }
 
 
-    .creations__stats {
-      grid-template-columns:
-        repeat(2, 1fr);
+    .dish-tile h2 {
 
-      row-gap: 24px;
-    }
+      font-size:
+        26px;
 
-
-    .featured-creation__title-row h2 {
-      font-size: 32px;
-    }
-
-
-    .dish-tile h3 {
-      font-size: 26px;
     }
 
   }
@@ -1527,13 +1387,15 @@ const categoryLabel = (slug: string) =>
      ===================================================== */
 
   .filter-btn:focus-visible,
-  .featured-creation:focus-visible,
   .dish-tile:focus-visible {
+
     outline:
       2px solid
       var(--color-accent);
 
-    outline-offset: 5px;
+    outline-offset:
+      5px;
+
   }
 
 
@@ -1544,18 +1406,27 @@ const categoryLabel = (slug: string) =>
   @media (prefers-reduced-motion: reduce) {
 
     .reveal {
-      opacity: 1;
-      transform: none;
-      animation: none;
+
+      opacity:
+        1;
+
+      transform:
+        none;
+
+      animation:
+        none;
+
     }
 
 
-    .featured-creation__image img,
     .dish-tile__image img,
     .filter-btn,
     .dish-tile,
-    .featured-creation__arrow {
-      transition: none !important;
+    .dish-tile__arrow {
+
+      transition:
+        none !important;
+
     }
 
   }

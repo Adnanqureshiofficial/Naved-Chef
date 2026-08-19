@@ -46,7 +46,7 @@ function formatRange(start: string, end: string | undefined, current: boolean) {
 </section>
 
 <style>
-  .experience { padding-block: 100px; }
+  .experience { padding-block: 30px; }
   .timeline { list-style: none; margin: 48px 0 0; padding: 0; border-left: 1px solid var(--color-border); }
   .timeline__item { position: relative; padding-left: 32px; padding-bottom: 48px; }
   .timeline__item::before {
@@ -65,7 +65,9 @@ function formatRange(start: string, end: string | undefined, current: boolean) {
   .timeline__highlights { margin-top: 16px; padding-left: 18px; color: var(--color-text-muted); font-size: var(--text-body); }
   .timeline__highlights li { margin-bottom: 6px; }
   .timeline__empty { color: var(--color-text-muted); margin-top: 32px; }
-
+.eyebrow {
+  color: var(--color-accent);
+}
   @media (min-width: 768px) {
     .timeline { margin-left: 4px; }
 
