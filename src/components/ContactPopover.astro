@@ -4,14 +4,11 @@ interface Props {
   email?: string;
 }
 
-const {
-  cvUrl = '/cv/naved-shaikh-cv.pdf',
-  email = 'chef@example.com',
-} = Astro.props;
+const { cvUrl = "/Shaikh_Naved CV.pdf", email = "navedinamdar@gmail.com" } =
+  Astro.props;
 ---
 
 <div class="contact-float">
-
   <!-- Floating trigger -->
   <button
     class="contact-float__trigger"
@@ -20,22 +17,40 @@ const {
     aria-expanded="false"
     aria-haspopup="true"
   >
-    <span class="contact-float__icon contact-float__icon--open" aria-hidden="true">
-      ✉
+    <span
+      class="contact-float__icon contact-float__icon--open"
+      aria-hidden="true"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="lucide lucide-mail-icon lucide-mail"
+        ><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect
+          x="2"
+          y="4"
+          width="20"
+          height="16"
+          rx="2"></rect></svg
+      >
     </span>
 
-    <span class="contact-float__icon contact-float__icon--close" aria-hidden="true">
+    <span
+      class="contact-float__icon contact-float__icon--close"
+      aria-hidden="true"
+    >
       ×
     </span>
   </button>
 
-
   <!-- Small action menu -->
-  <div
-    class="contact-float__menu"
-    aria-hidden="true"
-  >
-
+  <div class="contact-float__menu" aria-hidden="true">
     <a
       href={cvUrl}
       download
@@ -43,14 +58,24 @@ const {
       aria-label="Download CV"
     >
       <span class="contact-float__action-icon" aria-hidden="true">
-        ↓
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-arrow-down-to-line-icon lucide-arrow-down-to-line"
+          ><path d="M12 17V3"></path><path d="m6 11 6 6 6-6"></path><path
+            d="M19 21H5"></path></svg
+        >
       </span>
 
-      <span class="contact-float__tooltip">
-        View CV
-      </span>
+      <span class="contact-float__tooltip"> View CV </span>
     </a>
-
 
     <a
       href={`mailto:${email}`}
@@ -58,18 +83,30 @@ const {
       aria-label="Email Chef"
     >
       <span class="contact-float__action-icon" aria-hidden="true">
-        ✉
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-mail-icon lucide-mail"
+          ><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect
+            x="2"
+            y="4"
+            width="20"
+            height="16"
+            rx="2"></rect></svg
+        >
       </span>
 
-      <span class="contact-float__tooltip">
-        Email Chef
-      </span>
+      <span class="contact-float__tooltip"> Email Chef </span>
     </a>
-
   </div>
-
 </div>
-
 
 <style>
   /* =====================================================
@@ -80,37 +117,35 @@ const {
     display: none;
   }
 
-/* =================================================
+  /* =================================================
    SUBTLE CONTACT PULSE
    ================================================= */
 
-@keyframes contactPulse {
-  0% {
-    box-shadow:
-      0 0 0 0 rgba(200, 169, 107, 0.45),
-      0 8px 25px rgba(0, 0, 0, 0.28);
-  }
+  @keyframes contactPulse {
+    0% {
+      box-shadow:
+        0 0 0 0 rgba(200, 169, 107, 0.45),
+        0 8px 25px rgba(0, 0, 0, 0.28);
+    }
 
-  70% {
-    box-shadow:
-      0 0 0 10px rgba(200, 169, 107, 0),
-      0 8px 25px rgba(0, 0, 0, 0.28);
-  }
+    70% {
+      box-shadow:
+        0 0 0 10px rgba(200, 169, 107, 0),
+        0 8px 25px rgba(0, 0, 0, 0.28);
+    }
 
-  100% {
-    box-shadow:
-      0 0 0 0 rgba(200, 169, 107, 0),
-      0 8px 25px rgba(0, 0, 0, 0.28);
+    100% {
+      box-shadow:
+        0 0 0 0 rgba(200, 169, 107, 0),
+        0 8px 25px rgba(0, 0, 0, 0.28);
+    }
   }
-}
-
 
   /* =====================================================
      MOBILE CONTACT BUTTON
      ===================================================== */
 
   @media (max-width: 767px) {
-
     .contact-float {
       position: fixed;
 
@@ -127,7 +162,6 @@ const {
 
       gap: 8px;
     }
-
 
     /* =================================================
        MAIN TRIGGER
@@ -148,26 +182,20 @@ const {
 
       padding: 0;
 
-      border:
-        1px solid
-        var(--color-accent);
+      border: 1px solid var(--color-accent);
 
       border-radius: 50%;
 
-      background:
-        rgba(20, 18, 16, 0.88);
+      background: rgba(20, 18, 16, 0.88);
 
-      color:
-        var(--color-accent);
+      color: var(--color-accent);
 
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
 
       cursor: pointer;
 
-      box-shadow:
-        0 8px 25px
-        rgba(0, 0, 0, 0.28);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.28);
 
       transition:
         background 0.3s var(--ease-luxury),
@@ -175,29 +203,22 @@ const {
         border-color 0.3s var(--ease-luxury),
         transform 0.3s var(--ease-luxury);
     }
-.contact-float__trigger {
-  animation:
-    contactPulse 2.8s var(--ease-luxury) infinite;
-}
-.contact-float.is-open .contact-float__trigger,
-.contact-float__trigger:hover {
-  animation: none;
-}
-
-    .contact-float__trigger:hover,
-    .contact-float.is-open
     .contact-float__trigger {
-
-      background:
-        var(--color-accent);
-
-      color:
-        var(--color-bg);
-
-      border-color:
-        var(--color-accent-hover);
+      animation: contactPulse 2.8s var(--ease-luxury) infinite;
+    }
+    .contact-float.is-open .contact-float__trigger,
+    .contact-float__trigger:hover {
+      animation: none;
     }
 
+    .contact-float__trigger:hover,
+    .contact-float.is-open .contact-float__trigger {
+      background: var(--color-accent);
+
+      color: var(--color-bg);
+
+      border-color: var(--color-accent-hover);
+    }
 
     /* =================================================
        TRIGGER ICONS
@@ -211,8 +232,7 @@ const {
       align-items: center;
       justify-content: center;
 
-      font-family:
-        var(--font-body);
+      font-family: var(--font-body);
 
       font-size: 18px;
 
@@ -223,43 +243,33 @@ const {
         transform 0.3s var(--ease-luxury);
     }
 
-
     .contact-float__icon--open {
       opacity: 1;
       transform: rotate(0deg);
     }
-
 
     .contact-float__icon--close {
       opacity: 0;
       transform: rotate(-45deg);
     }
 
-
-    .contact-float.is-open
-    .contact-float__icon--open {
+    .contact-float.is-open .contact-float__icon--open {
       opacity: 0;
 
-      transform:
-        rotate(45deg);
+      transform: rotate(45deg);
     }
 
-
-    .contact-float.is-open
-    .contact-float__icon--close {
+    .contact-float.is-open .contact-float__icon--close {
       opacity: 1;
 
-      transform:
-        rotate(0deg);
+      transform: rotate(0deg);
     }
-
 
     /* =================================================
        ACTION MENU
        ================================================= */
 
     .contact-float__menu {
-
       order: 1;
 
       display: flex;
@@ -271,9 +281,7 @@ const {
       opacity: 0;
       visibility: hidden;
 
-      transform:
-        translateY(8px)
-        scale(0.94);
+      transform: translateY(8px) scale(0.94);
 
       pointer-events: none;
 
@@ -283,28 +291,21 @@ const {
         visibility 0.3s;
     }
 
-
-    .contact-float.is-open
-    .contact-float__menu {
-
+    .contact-float.is-open .contact-float__menu {
       opacity: 1;
 
       visibility: visible;
 
-      transform:
-        translateY(0)
-        scale(1);
+      transform: translateY(0) scale(1);
 
       pointer-events: auto;
     }
-
 
     /* =================================================
        ACTION BUTTON
        ================================================= */
 
     .contact-float__action {
-
       position: relative;
 
       display: flex;
@@ -315,24 +316,18 @@ const {
       width: 38px;
       height: 38px;
 
-      border:
-        1px solid
-        var(--color-border);
+      border: 1px solid var(--color-border);
 
       border-radius: 50%;
 
-      background:
-        rgba(28, 25, 22, 0.94);
+      background: rgba(28, 25, 22, 0.94);
 
-      color:
-        var(--color-accent);
+      color: var(--color-accent);
 
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
 
-      box-shadow:
-        0 6px 18px
-        rgba(0, 0, 0, 0.22);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
 
       transition:
         background 0.25s var(--ease-luxury),
@@ -341,29 +336,21 @@ const {
         transform 0.25s var(--ease-luxury);
     }
 
-
     .contact-float__action:hover {
+      background: var(--color-accent);
 
-      background:
-        var(--color-accent);
+      color: var(--color-bg);
 
-      color:
-        var(--color-bg);
+      border-color: var(--color-accent);
 
-      border-color:
-        var(--color-accent);
-
-      transform:
-        scale(1.06);
+      transform: scale(1.06);
     }
-
 
     /* =================================================
        ACTION ICON
        ================================================= */
 
     .contact-float__action-icon {
-
       display: flex;
 
       align-items: center;
@@ -374,221 +361,154 @@ const {
       line-height: 1;
     }
 
-
     /* =================================================
        TOOLTIP
        ================================================= */
-.contact-float__tooltip {
-  position: static;
-  display: inline-flex;
-  align-items: center;
+    .contact-float__tooltip {
+      position: static;
+      display: inline-flex;
+      align-items: center;
 
-  padding: 0;
-  margin: 0;
+      padding: 0;
+      margin: 0;
 
-  white-space: nowrap;
+      white-space: nowrap;
 
-  color: var(--color-text);
-  font-size: 10px;
-  font-family: var(--font-body);
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
+      color: var(--color-text);
+      font-size: 10px;
+      font-family: var(--font-body);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
 
-  opacity: 0;
-  max-width: 0;
-  overflow: hidden;
+      opacity: 0;
+      max-width: 0;
+      overflow: hidden;
 
-  pointer-events: none;
+      pointer-events: none;
 
-  transition:
-    opacity 0.25s var(--ease-luxury),
-    max-width 0.3s var(--ease-luxury);
-}
+      transition:
+        opacity 0.25s var(--ease-luxury),
+        max-width 0.3s var(--ease-luxury);
+    }
 
-/* Show label when the main contact button is opened */
-.contact-float.is-open
-.contact-float__tooltip {
-  opacity: 1;
-  max-width: 100px;
-}
+    /* Show label when the main contact button is opened */
+    .contact-float.is-open .contact-float__tooltip {
+      opacity: 1;
+      max-width: 100px;
+    }
 
-/* Action becomes a pill containing icon + label */
-.contact-float.is-open
-.contact-float__action {
-  width: auto;
-  min-width: 38px;
-  padding: 0 11px;
+    /* Action becomes a pill containing icon + label */
+    .contact-float.is-open .contact-float__action {
+      width: auto;
+      min-width: 38px;
+      padding: 0 11px;
 
-  gap: 7px;
+      gap: 7px;
 
-  border-radius: 20px;
-}
+      border-radius: 20px;
+    }
 
     /* =================================================
        SMALL PHONES
        ================================================= */
 
     @media (max-width: 380px) {
-
       .contact-float {
-
         right: 12px;
         bottom: 12px;
       }
 
-
       .contact-float__trigger {
-
         width: 44px;
         height: 44px;
       }
 
-
       .contact-float__action {
-
         width: 36px;
         height: 36px;
       }
     }
-
 
     /* =================================================
        REDUCED MOTION
        ================================================= */
 
     @media (prefers-reduced-motion: reduce) {
-
       .contact-float__trigger,
       .contact-float__icon,
       .contact-float__menu,
       .contact-float__action,
       .contact-float__tooltip {
-
         transition: none;
       }
     }
-
   }
 </style>
 
-
 <script>
-  const contactFloat =
-    document.querySelector('.contact-float');
+  const contactFloat = document.querySelector(".contact-float");
 
   if (contactFloat) {
+    const trigger = contactFloat.querySelector(".contact-float__trigger");
 
-    const trigger =
-      contactFloat.querySelector(
-        '.contact-float__trigger'
-      );
-
-    const menu =
-      contactFloat.querySelector(
-        '.contact-float__menu'
-      );
+    const menu = contactFloat.querySelector(".contact-float__menu");
 
     if (trigger && menu) {
-
       const open = () => {
+        contactFloat.classList.add("is-open");
 
-        contactFloat.classList.add('is-open');
+        trigger.setAttribute("aria-expanded", "true");
 
-        trigger.setAttribute(
-          'aria-expanded',
-          'true'
-        );
-
-        menu.setAttribute(
-          'aria-hidden',
-          'false'
-        );
+        menu.setAttribute("aria-hidden", "false");
       };
-
 
       const close = () => {
+        contactFloat.classList.remove("is-open");
 
-        contactFloat.classList.remove(
-          'is-open'
-        );
+        trigger.setAttribute("aria-expanded", "false");
 
-        trigger.setAttribute(
-          'aria-expanded',
-          'false'
-        );
-
-        menu.setAttribute(
-          'aria-hidden',
-          'true'
-        );
+        menu.setAttribute("aria-hidden", "true");
       };
 
+      trigger.addEventListener("click", (event) => {
+        event.stopPropagation();
 
-      trigger.addEventListener(
-        'click',
-        (event) => {
-
-          event.stopPropagation();
-
-          if (
-            contactFloat.classList.contains(
-              'is-open'
-            )
-          ) {
-            close();
-          } else {
-            open();
-          }
+        if (contactFloat.classList.contains("is-open")) {
+          close();
+        } else {
+          open();
         }
-      );
-
+      });
 
       /*
        * Close when clicking outside.
        */
-      document.addEventListener(
-        'click',
-        (event) => {
-
-          if (
-            event.target instanceof Node &&
-            !contactFloat.contains(event.target)
-          ) {
-            close();
-          }
+      document.addEventListener("click", (event) => {
+        if (
+          event.target instanceof Node &&
+          !contactFloat.contains(event.target)
+        ) {
+          close();
         }
-      );
-
+      });
 
       /*
        * Escape closes the menu.
        */
-      document.addEventListener(
-        'keydown',
-        (event) => {
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          close();
 
-          if (event.key === 'Escape') {
-
-            close();
-
-            trigger.focus();
-          }
+          trigger.focus();
         }
-      );
-
+      });
 
       /*
        * Close after selecting an action.
        */
-      menu
-        .querySelectorAll('a')
-        .forEach((link) => {
-
-          link.addEventListener(
-            'click',
-            close
-          );
-        });
+      menu.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", close);
+      });
     }
   }
 </script>

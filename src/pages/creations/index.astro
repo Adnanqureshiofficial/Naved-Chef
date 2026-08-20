@@ -36,7 +36,7 @@ const categoryLabel = (slug: string) =>
 ---
 
 <BaseLayout
-  title="Creations — [Chef Full Name]"
+  title="Creations — Naved Shaikh"
   description="Explore a collection of pastry, chocolate, cake, entremet and viennoiserie creations shaped by technique, flavour and contemporary presentation."
 >
 
@@ -251,103 +251,6 @@ const categoryLabel = (slug: string) =>
 </BaseLayout>
 
 
-<script>
-
-  const buttons =
-    document.querySelectorAll<HTMLButtonElement>(
-      '.filter-btn'
-    );
-
-  const tiles =
-    document.querySelectorAll<HTMLElement>(
-      '.dish-tile'
-    );
-
-  const emptyState =
-    document.getElementById(
-      'creations-empty'
-    );
-
-
-  buttons.forEach((button) => {
-
-    button.addEventListener(
-      'click',
-      () => {
-
-        const filter =
-          button.dataset.filter ?? 'all';
-
-
-        /* ---------------------------------------------
-           Update active filter
-        --------------------------------------------- */
-
-        buttons.forEach((item) => {
-
-          item.classList.remove(
-            'is-active'
-          );
-
-          item.setAttribute(
-            'aria-selected',
-            'false'
-          );
-
-        });
-
-
-        button.classList.add(
-          'is-active'
-        );
-
-        button.setAttribute(
-          'aria-selected',
-          'true'
-        );
-
-
-        /* ---------------------------------------------
-           Filter creations
-        --------------------------------------------- */
-
-        let visibleCount = 0;
-
-
-        tiles.forEach((tile) => {
-
-          const matches =
-            filter === 'all' ||
-            tile.dataset.category === filter;
-
-
-          tile.hidden = !matches;
-
-
-          if (matches) {
-            visibleCount++;
-          }
-
-        });
-
-
-        /* ---------------------------------------------
-           Empty state
-        --------------------------------------------- */
-
-        if (emptyState) {
-
-          emptyState.hidden =
-            visibleCount !== 0;
-
-        }
-
-      }
-    );
-
-  });
-
-</script>
 
 
 <style>
@@ -964,6 +867,10 @@ const categoryLabel = (slug: string) =>
   }
 
 
+  .dish-tile.is-filtered-out {
+  display: none;
+}
+
   /* =====================================================
      REVEAL
      ===================================================== */
@@ -1432,3 +1339,49 @@ const categoryLabel = (slug: string) =>
   }
 
 </style>
+
+
+
+
+<script>
+  const buttons = document.querySelectorAll('.filter-btn');
+  const tiles = document.querySelectorAll('.dish-tile');
+  const emptyState = document.getElementById('creations-empty');
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const filter = button.dataset.filter || 'all';
+
+      // Update active button
+      buttons.forEach((item) => {
+        item.classList.remove('is-active');
+        item.setAttribute('aria-selected', 'false');
+      });
+
+      button.classList.add('is-active');
+      button.setAttribute('aria-selected', 'true');
+
+      // Filter tiles
+      let visibleCount = 0;
+
+      tiles.forEach((tile) => {
+        const category = tile.dataset.category;
+
+        const matches =
+          filter === 'all' || category === filter;
+
+        if (matches) {
+          tile.classList.remove('is-filtered-out');
+          visibleCount++;
+        } else {
+          tile.classList.add('is-filtered-out');
+        }
+      });
+
+      // Empty state
+      if (emptyState) {
+        emptyState.hidden = visibleCount !== 0;
+      }
+    });
+  });
+</script>
