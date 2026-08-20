@@ -1103,6 +1103,205 @@
 
 
 <script>
+  import { gsap } from '../scripts/motion.js';
+
+  const hero = document.querySelector('#hero');
+
+  if (hero) {
+    const reducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+
+    if (!reducedMotion) {
+      const image = hero.querySelector('#hero-image');
+      const eyebrow = hero.querySelector('.hero__eyebrow-wrap');
+      const eyebrowLine = hero.querySelector('.hero__eyebrow-line');
+      const titleLines = hero.querySelectorAll('.hero__title-line');
+      const description = hero.querySelector('.hero__description');
+      const meta = hero.querySelector('.hero__meta');
+      const scroll = hero.querySelector('.hero__scroll');
+      const scrollLine = hero.querySelector('.hero__scroll-line span');
+
+      const ctx = gsap.context(() => {
+
+        /*
+         * Initial states
+         */
+
+        gsap.set(image, {
+          scale: 1.08,
+        });
+
+        gsap.set(
+          [
+            eyebrow,
+            titleLines,
+            description,
+            meta,
+            scroll
+          ],
+          {
+            opacity: 0,
+            y: 24,
+          }
+        );
+
+        gsap.set(eyebrowLine, {
+          scaleX: 0,
+          transformOrigin: 'left center',
+        });
+
+        gsap.set(scrollLine, {
+          scaleY: 0,
+          transformOrigin: 'top center',
+        });
+
+
+        /*
+         * Intro timeline
+         */
+
+        const tl = gsap.timeline({
+          defaults: {
+            ease: 'power3.out',
+          },
+        });
+
+
+        /*
+         * 1. Image settles into place
+         */
+
+        tl.to(image, {
+          scale: 1,
+          duration: 1.8,
+          ease: 'power4.out',
+        })
+
+
+        /*
+         * 2. Eyebrow line
+         */
+
+        .to(
+          eyebrowLine,
+          {
+            scaleX: 1,
+            duration: 0.7,
+            ease: 'power2.out',
+          },
+          '-=1.25'
+        )
+
+
+        /*
+         * 3. Eyebrow text
+         */
+
+        .to(
+          eyebrow,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.65,
+          },
+          '-=0.45'
+        )
+
+
+        /*
+         * 4. Name — each line separately
+         */
+
+        .to(
+          titleLines,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.85,
+            stagger: 0.12,
+            ease: 'power3.out',
+          },
+          '-=0.35'
+        )
+
+
+        /*
+         * 5. Description
+         */
+
+        .to(
+          description,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+          },
+          '-=0.45'
+        )
+
+
+        /*
+         * 6. Supporting metadata
+         */
+
+        .to(
+          meta,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+          },
+          '-=0.4'
+        )
+
+
+        /*
+         * 7. Scroll indicator
+         */
+
+        .to(
+          scroll,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+          },
+          '-=0.25'
+        )
+
+
+        /*
+         * 8. Scroll line draws itself
+         */
+
+        .to(
+          scrollLine,
+          {
+            scaleY: 1,
+            duration: 0.8,
+            ease: 'power2.out',
+          },
+          '-=0.3'
+        );
+
+      }, hero);
+
+
+      /*
+       * Astro page navigation cleanup
+       */
+
+      document.addEventListener(
+        'astro:before-swap',
+        () => ctx.revert(),
+        { once: true }
+      );
+    }
+  }
+</script>
+
+<!-- <script>
 
   /*
    * =========================================================
@@ -1358,4 +1557,4 @@
 
   }
 
-</script>
+</script> -->

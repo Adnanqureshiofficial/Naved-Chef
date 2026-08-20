@@ -1,0 +1,1022 @@
+---
+const sections = [
+  { id: 'hero', label: 'Intro', number: '01' },
+  { id: 'bio', label: 'About', number: '02' },
+  { id: 'expertise', label: 'Expertise', number: '03' },
+  { id: 'experience', label: 'Experience', number: '04' },
+  { id: 'portfolio', label: 'Portfolio', number: '05' },
+  { id: 'specialized-training', label: 'Special Training', number: '06' },
+  { id: 'contact', label: 'Contact', number: '07' },
+];
+---
+
+<nav
+  class="section-nav"
+  aria-label="Page sections"
+  data-section-nav
+>
+  <!-- =======================================================
+       NAVIGATION RAIL / MOBILE OPENER
+       ======================================================= -->
+
+  <button
+    class="section-nav__trigger"
+    type="button"
+    aria-label="Open page sections"
+    aria-expanded="false"
+    data-section-trigger
+  >
+    <span class="section-nav__track" aria-hidden="true"></span>
+
+    <span class="section-nav__trigger-dots" aria-hidden="true">
+      {sections.map((section) => (
+        <span
+          class="section-nav__trigger-dot"
+          data-trigger-dot={section.id}
+        ></span>
+      ))}
+    </span>
+  </button>
+
+
+  <!-- =======================================================
+       SECTION LINKS
+       ======================================================= -->
+
+  <div
+    class="section-nav__menu"
+    data-section-menu
+  >
+    {
+      sections.map((section) => (
+        <a
+          href={`#${section.id}`}
+          class="section-nav__item"
+          data-section-link
+          data-target={section.id}
+          aria-label={`Go to ${section.label}`}
+        >
+          {/* <span class="section-nav__number">
+            {section.number}
+          </span> */}
+
+          <span class="section-nav__indicator" aria-hidden="true"></span>
+
+          <span class="section-nav__label">
+            {section.label}
+          </span>
+        </a>
+      ))
+    }
+  </div>
+</nav>
+
+
+<script>
+  const nav = document.querySelector('[data-section-nav]');
+  const trigger = document.querySelector('[data-section-trigger]');
+  const menu = document.querySelector('[data-section-menu]');
+
+  const links = [
+    ...document.querySelectorAll('[data-section-link]')
+  ];
+
+  if (nav && trigger && menu && links.length) {
+
+    /*
+     * ---------------------------------------------------------
+     * DEVICE TYPE
+     * ---------------------------------------------------------
+     *
+     * Desktop:
+     *   hover interaction
+     *
+     * Touch:
+     *   click/tap interaction
+     */
+
+    const touchQuery = window.matchMedia(
+      '(hover: none) and (pointer: coarse)'
+    );
+
+    const isTouchDevice = () => touchQuery.matches;
+
+
+    /*
+     * ---------------------------------------------------------
+     * SECTIONS
+     * ---------------------------------------------------------
+     */
+
+    const sections = links
+      .map((link) => {
+        const id = link.getAttribute('data-target');
+
+        return id
+          ? document.getElementById(id)
+          : null;
+      })
+      .filter(Boolean);
+
+
+    /*
+     * ---------------------------------------------------------
+     * OPEN / CLOSE
+     * ---------------------------------------------------------
+     */
+
+    const openNav = () => {
+      nav.classList.add('is-open');
+
+      trigger.setAttribute(
+        'aria-expanded',
+        'true'
+      );
+
+      trigger.setAttribute(
+        'aria-label',
+        'Close page sections'
+      );
+    };
+
+
+    const closeNav = () => {
+      nav.classList.remove('is-open');
+
+      trigger.setAttribute(
+        'aria-expanded',
+        'false'
+      );
+
+      trigger.setAttribute(
+        'aria-label',
+        'Open page sections'
+      );
+    };
+
+
+    const toggleNav = () => {
+      if (nav.classList.contains('is-open')) {
+        closeNav();
+      } else {
+        openNav();
+      }
+    };
+
+
+    /*
+     * ---------------------------------------------------------
+     * ACTIVE SECTION
+     * ---------------------------------------------------------
+     */
+
+    const setActive = (id) => {
+
+      links.forEach((link) => {
+
+        const isActive =
+          link.getAttribute('data-target') === id;
+
+        link.classList.toggle(
+          'is-active',
+          isActive
+        );
+
+        if (isActive) {
+          link.setAttribute(
+            'aria-current',
+            'location'
+          );
+        } else {
+          link.removeAttribute(
+            'aria-current'
+          );
+        }
+      });
+
+
+      /*
+       * Update the small collapsed dots.
+       */
+
+      const dots = document.querySelectorAll(
+        '[data-trigger-dot]'
+      );
+
+      dots.forEach((dot) => {
+
+        const isActive =
+          dot.getAttribute('data-trigger-dot') === id;
+
+        dot.classList.toggle(
+          'is-active',
+          isActive
+        );
+      });
+    };
+
+
+    /*
+     * ---------------------------------------------------------
+     * SCROLLSPY
+     * ---------------------------------------------------------
+     */
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+
+        const visible = entries
+          .filter(
+            (entry) =>
+              entry.isIntersecting
+          )
+          .sort(
+            (a, b) =>
+              a.boundingClientRect.top -
+              b.boundingClientRect.top
+          );
+
+        if (visible.length) {
+          setActive(
+            visible[0].target.id
+          );
+        }
+      },
+      {
+        root: null,
+
+        /*
+         * Activate a section when it reaches
+         * roughly the upper-middle area.
+         */
+        rootMargin:
+          '-35% 0px -55% 0px',
+
+        threshold: 0
+      }
+    );
+
+
+    sections.forEach((section) => {
+      observer.observe(section);
+    });
+
+
+    /*
+     * ---------------------------------------------------------
+     * MOBILE / TOUCH TRIGGER
+     * ---------------------------------------------------------
+     *
+     * IMPORTANT:
+     *
+     * The trigger is the ONLY thing that opens the menu.
+     *
+     * Clicking a section never opens the menu.
+     */
+
+    trigger.addEventListener(
+      'click',
+      (event) => {
+
+        event.preventDefault();
+
+        if (!isTouchDevice()) {
+          return;
+        }
+
+        toggleNav();
+      }
+    );
+
+
+    /*
+     * ---------------------------------------------------------
+     * SECTION LINKS
+     * ---------------------------------------------------------
+     */
+
+    links.forEach((link) => {
+
+      link.addEventListener(
+        'click',
+        (event) => {
+
+          const id =
+            link.getAttribute(
+              'data-target'
+            );
+
+          if (!id) return;
+
+          const target =
+            document.getElementById(id);
+
+          if (!target) return;
+
+          event.preventDefault();
+
+
+          /*
+           * Navigate immediately.
+           */
+
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+
+
+          /*
+           * Update URL without browser jump.
+           */
+
+          history.pushState(
+            null,
+            '',
+            `#${id}`
+          );
+
+
+          /*
+           * Update active state immediately.
+           */
+
+          setActive(id);
+
+
+          /*
+           * Close navigation on touch.
+           */
+
+          if (isTouchDevice()) {
+            closeNav();
+          }
+        }
+      );
+    });
+
+
+    /*
+     * ---------------------------------------------------------
+     * CLICK OUTSIDE
+     * ---------------------------------------------------------
+     */
+
+    document.addEventListener(
+      'pointerdown',
+      (event) => {
+
+        if (!isTouchDevice()) {
+          return;
+        }
+
+        if (
+          !nav.contains(
+            event.target
+          )
+        ) {
+          closeNav();
+        }
+      }
+    );
+
+
+    /*
+     * ---------------------------------------------------------
+     * ESCAPE KEY
+     * ---------------------------------------------------------
+     */
+
+    document.addEventListener(
+      'keydown',
+      (event) => {
+
+        if (
+          event.key === 'Escape' &&
+          nav.classList.contains(
+            'is-open'
+          )
+        ) {
+          closeNav();
+
+          trigger.focus();
+        }
+      }
+    );
+
+
+    /*
+     * ---------------------------------------------------------
+     * INITIAL ACTIVE SECTION
+     * ---------------------------------------------------------
+     */
+
+    const initialId =
+      window.location.hash.replace(
+        '#',
+        ''
+      ) ||
+      sections[0]?.id;
+
+    if (initialId) {
+      setActive(initialId);
+    }
+
+
+    /*
+     * ---------------------------------------------------------
+     * HANDLE DEVICE CHANGE
+     * ---------------------------------------------------------
+     */
+
+    touchQuery.addEventListener(
+      'change',
+      () => {
+        closeNav();
+      }
+    );
+  }
+</script>
+
+
+<style>
+  /* =========================================================
+     FLOATING SECTION NAVIGATION
+     ========================================================= */
+
+  .section-nav {
+    position: fixed;
+
+    z-index: 100;
+
+    top: 50%;
+    left: 22px;
+
+    width: 22px;
+
+    transform: translateY(-50%);
+
+    padding: 10px;
+
+    border: 1px solid transparent;
+
+    border-radius: 5px;
+
+    background: transparent;
+
+    backdrop-filter: blur(0);
+    -webkit-backdrop-filter: blur(0);
+
+    transition:
+      width 0.45s var(--ease-luxury),
+      background 0.45s ease,
+      border-color 0.45s ease,
+      backdrop-filter 0.45s ease,
+      -webkit-backdrop-filter 0.45s ease;
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    pointer-events: auto;
+  }
+
+
+  /* =========================================================
+     MOBILE / TOUCH TRIGGER
+     ========================================================= */
+
+  .section-nav__trigger {
+    position: absolute;
+
+    top: 10px;
+    left: 10px;
+
+    z-index: 5;
+
+    width: 14px;
+
+    height: calc(100% - 20px);
+
+    min-height: 196px;
+
+    margin: 0;
+    padding: 0;
+
+    border: 0;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    -webkit-tap-highlight-color: transparent;
+
+    touch-action: manipulation;
+
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+
+  /* =========================================================
+     VERTICAL TRACK
+     ========================================================= */
+
+  .section-nav__track {
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+
+    left: 50%;
+
+    width: 1px;
+
+    transform: translateX(-50%);
+
+    background: var(--color-border);
+
+    opacity: 0.8;
+
+    pointer-events: none;
+  }
+
+
+  /* =========================================================
+     COLLAPSED DOTS
+     ========================================================= */
+
+  .section-nav__trigger-dots {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    pointer-events: none;
+  }
+
+
+  .section-nav__trigger-dot {
+    width: 7px;
+    height: 7px;
+
+    flex-shrink: 0;
+
+    border: 1px solid var(--color-text-muted);
+
+    background: var(--color-bg);
+
+    transform: rotate(45deg) scale(0.55);
+
+    transition:
+      background 0.3s ease,
+      border-color 0.3s ease,
+      transform 0.35s var(--ease-luxury);
+  }
+
+
+  .section-nav__trigger-dot.is-active {
+    border-color: var(--color-accent);
+
+    background: var(--color-accent);
+
+    transform: rotate(45deg) scale(0.8);
+  }
+
+
+  /* =========================================================
+     MENU
+     ========================================================= */
+
+  .section-nav__menu {
+    position: relative;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+    width: 100%;
+  }
+
+
+  /* =========================================================
+     ITEM
+     ========================================================= */
+
+  .section-nav__item {
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    min-height: 28px;
+
+    width: max-content;
+
+    color: var(--color-text-muted);
+
+    text-decoration: none;
+
+    -webkit-tap-highlight-color: transparent;
+
+    touch-action: manipulation;
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    transition:
+      color 0.3s ease,
+      opacity 0.3s ease;
+  }
+
+
+  /* =========================================================
+     NUMBER
+     ========================================================= */
+
+  .section-nav__number {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 11px;
+
+    color: transparent;
+
+    font-size: 7px;
+
+    line-height: 1;
+
+    transition:
+      color 0.3s ease,
+      transform 0.3s var(--ease-luxury);
+  }
+
+
+  /* =========================================================
+     INDICATOR
+     ========================================================= */
+
+  .section-nav__indicator {
+    position: absolute;
+
+    left: 2px;
+
+    width: 7px;
+    height: 7px;
+
+    border: 1px solid var(--color-text-muted);
+
+    background: var(--color-bg);
+
+    transform: rotate(45deg) scale(0.55);
+
+    transition:
+      background 0.3s ease,
+      border-color 0.3s ease,
+      transform 0.35s var(--ease-luxury);
+  }
+
+
+  /* =========================================================
+     LABEL
+     ========================================================= */
+
+  .section-nav__label {
+    display: block;
+
+    max-width: 0;
+
+    margin-left: 0;
+
+    overflow: hidden;
+
+    opacity: 0;
+
+    transform: translateX(-6px);
+
+    white-space: nowrap;
+
+    color: var(--color-text);
+
+    font-size: 9px;
+
+    font-weight: 400;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1.5px;
+
+    transition:
+      max-width 0.45s var(--ease-luxury),
+      margin-left 0.45s var(--ease-luxury),
+      opacity 0.3s ease,
+      transform 0.45s var(--ease-luxury);
+  }
+
+
+  /* =========================================================
+     DESKTOP HOVER
+     ========================================================= */
+
+  @media (hover: hover) and (pointer: fine) {
+
+    .section-nav:hover {
+      width: 150px;
+
+      background:
+        rgba(20, 18, 16, 0.42);
+
+      border-color:
+        var(--color-border);
+
+      backdrop-filter:
+        blur(14px) saturate(110%);
+
+      -webkit-backdrop-filter:
+        blur(14px) saturate(110%);
+    }
+
+
+    .section-nav:hover
+    .section-nav__label {
+      max-width: 110px;
+
+      margin-left: 15px;
+
+      opacity: 1;
+
+      transform: translateX(0);
+    }
+
+
+    .section-nav:hover
+    .section-nav__number {
+      color: var(--color-text-muted);
+    }
+
+
+    .section-nav__item:hover {
+      color: var(--color-text);
+    }
+
+
+    .section-nav__item:hover
+    .section-nav__indicator {
+      border-color:
+        var(--color-accent);
+
+      transform:
+        rotate(45deg) scale(0.8);
+    }
+
+
+    .section-nav__item:hover
+    .section-nav__number {
+      color: var(--color-accent);
+    }
+  }
+
+
+  /* =========================================================
+     OPEN STATE
+     ========================================================= */
+
+  .section-nav.is-open {
+    width: 150px;
+
+    background:
+      rgba(20, 18, 16, 0.52);
+
+    border-color:
+      var(--color-border);
+
+    backdrop-filter:
+      blur(14px) saturate(110%);
+
+    -webkit-backdrop-filter:
+      blur(14px) saturate(110%);
+  }
+
+
+  .section-nav.is-open
+  .section-nav__label {
+    max-width: 110px;
+
+    margin-left: 15px;
+
+    opacity: 1;
+
+    transform: translateX(0);
+  }
+
+
+  .section-nav.is-open
+  .section-nav__number {
+    color: var(--color-text-muted);
+  }
+
+
+  /* =========================================================
+     ACTIVE SECTION
+     ========================================================= */
+
+  .section-nav__item.is-active {
+    color: var(--color-accent);
+  }
+
+
+  .section-nav__item.is-active
+  .section-nav__indicator {
+    border-color:
+      var(--color-accent);
+
+    background:
+      var(--color-accent);
+
+    transform:
+      rotate(45deg) scale(0.8);
+  }
+
+
+  .section-nav__item.is-active
+  .section-nav__number {
+    color: var(--color-accent);
+  }
+
+
+  .section-nav__item.is-active
+  .section-nav__label {
+    color: var(--color-text);
+  }
+
+
+  /* =========================================================
+     ACTIVE VERTICAL ACCENT
+     ========================================================= */
+
+  .section-nav__item.is-active::before {
+    content: '';
+
+    position: absolute;
+
+    left: 5px;
+
+    top: 50%;
+
+    width: 1px;
+    height: 100%;
+
+    background:
+      var(--color-accent);
+
+    transform:
+      translateY(-50%);
+  }
+
+
+  /* =========================================================
+     TABLET
+     ========================================================= */
+
+  @media (max-width: 900px) {
+
+    .section-nav {
+      left: 14px;
+    }
+  }
+
+
+  /* =========================================================
+     MOBILE
+     ========================================================= */
+
+  @media (max-width: 640px) {
+
+    .section-nav {
+      top: 50%;
+      left: 9px;
+
+      width: 20px;
+
+      padding: 8px;
+      transform:
+        translateY(-50%);
+    }
+
+
+    .section-nav__trigger {
+      top: 8px;
+      left: 8px;
+flex-direction: row;
+      width: 12px;
+
+      height: calc(100% - 16px);
+
+      min-height: 182px;
+    }
+
+
+    .section-nav__track {
+      left: 50%;
+    }
+
+
+    .section-nav__trigger-dot {
+      width: 6px;
+      height: 6px;
+    }
+
+
+    .section-nav.is-open {
+      width: 145px;
+
+      background:
+        rgba(20, 18, 16, 0.58);
+
+      backdrop-filter:
+        blur(14px);
+
+      -webkit-backdrop-filter:
+        blur(14px);
+    }
+
+
+    .section-nav.is-open
+    .section-nav__label {
+      max-width: 105px;
+
+      margin-left: 14px;
+    }
+  }
+
+
+  /* =========================================================
+     SMALL PHONES
+     ========================================================= */
+
+  @media (max-width: 400px) {
+
+    .section-nav {
+      left: 7px;
+
+      width: 18px;
+
+      padding: 7px;
+    }
+
+
+    .section-nav__trigger {
+      top: 7px;
+      left: 7px;
+
+      width: 11px;
+
+      height: calc(100% - 14px);
+
+      min-height: 172px;
+    }
+
+
+    .section-nav.is-open {
+      width: 138px;
+    }
+
+
+    .section-nav.is-open
+    .section-nav__label {
+      max-width: 100px;
+
+      margin-left: 13px;
+    }
+  }
+
+
+  /* =========================================================
+     REDUCED MOTION
+     ========================================================= */
+
+  @media (prefers-reduced-motion: reduce) {
+
+    .section-nav,
+    .section-nav *,
+    .section-nav__item {
+      transition: none;
+    }
+  }
+</style>

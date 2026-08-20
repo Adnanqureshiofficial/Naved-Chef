@@ -63,11 +63,11 @@ const categoryLabel = (slug: string) =>
       </div>
 
 
-      <div class="creations__intro-main">
+      <div class="creations__intro-main"  >
 
-        <div class="creations__intro-heading reveal">
+        <div class="creations__intro-heading " data-reveal-stagger >
 
-          <h1 class="font-display">
+          <h1 class="font-display" data-reveal-item>
             Crafted with
             <em>passion.</em>
           </h1>
@@ -75,9 +75,9 @@ const categoryLabel = (slug: string) =>
         </div>
 
 
-        <div class="creations__intro-copy reveal">
+        <div class="creations__intro-copy reveal" data-reveal-stagger >
 
-          <p>
+          <p data-reveal-item>
             A collection of pastry, chocolate and bakery creations developed
             through professional kitchen experience, thoughtful flavour
             combinations and a passion for refined presentation.
@@ -150,15 +150,18 @@ const categoryLabel = (slug: string) =>
       <div
         class="creations__grid"
         id="creations-grid"
+        data-reveal-stagger
       >
 
         {allDishes.map((dish, index) => (
 
           <a
             href={`/creations/${dish.id}`}
+            
             class:list={[
               'dish-tile',
               'reveal',
+              
               {
                 /*
                  * Maintain the original 12-column system:
@@ -183,6 +186,7 @@ const categoryLabel = (slug: string) =>
                 src={dish.data.heroImage}
                 alt={dish.data.title}
                 loading="lazy"
+                data-reveal-image
               />
 
               <span

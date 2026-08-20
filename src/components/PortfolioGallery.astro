@@ -24,18 +24,18 @@ const categoryLabels: Record<string, string> = {
        SECTION HEADER
        ===================================================== -->
 
-  <div class="container portfolio__header">
+  <div class="container portfolio__header" data-reveal-stagger>
 
-    <div class="portfolio__heading">
-      <p class="eyebrow">Signature Creations</p>
+    <div class="portfolio__heading" data-reveal-item>
+      <p class="eyebrow" >Signature Creations</p>
 
-      <h2 id="portfolio-title">
+      <h2 id="portfolio-title" data-reveal-item>
         A Featured selection from<br />
         the pastry kitchen
       </h2>
     </div>
 
-    <div class="portfolio__intro">
+    <div class="portfolio__intro" data-reveal-item>
       <p>
         Selected pastry, chocolate and bakery creations developed
         through contemporary technique and refined presentation.
@@ -47,7 +47,7 @@ const categoryLabels: Record<string, string> = {
         aria-label="View the complete culinary portfolio by category"
       >
         <span>View full portfolio</span>
-        <span class="portfolio__link-arrow" aria-hidden="true">↗</span>
+          <span class="portfolio__link-arrow" aria-hidden="true">↗</span>
       </a>
     </div>
 
@@ -73,7 +73,7 @@ const categoryLabels: Record<string, string> = {
           const number = String(index + 1).padStart(2, "0");
 
           return (
-            <article class="dish" data-dish-card>
+            <article class="dish" data-dish-card data-reveal-image>
               <a
                 href={`/creations/${dish.id}`}
                 class="dish__link"
@@ -87,6 +87,7 @@ const categoryLabels: Record<string, string> = {
                     src={dish.data.heroImage}
                     alt={dish.data.title}
                     class="dish__image"
+                    data-reveal-image 
                     loading={index === 0 ? "eager" : "lazy"}
                     decoding="async"
                     fetchpriority={index === 0 ? "high" : "auto"}

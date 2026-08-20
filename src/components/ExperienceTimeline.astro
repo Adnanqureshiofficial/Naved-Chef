@@ -16,9 +16,10 @@ function formatRange(start: string, end: string | undefined, current: boolean) {
     <p class="eyebrow">Career</p>
     <h2>Experience</h2>
 
-    <ol class="timeline">
+    <ol class="timeline" data-reveal-stagger>
+      
       {entries.map((entry) => (
-        <li class="timeline__item">
+        <li class="timeline__item" data-reveal-item>
           <div class="timeline__meta">
             <span class="timeline__range">{formatRange(entry.data.startDate, entry.data.endDate, entry.data.current)}</span>
           </div>
@@ -38,8 +39,7 @@ function formatRange(start: string, end: string | undefined, current: boolean) {
 
     {entries.length === 0 && (
       <p class="timeline__empty">
-        <!-- TODO: add entries as markdown files in src/content/experience/ -->
-        No experience entries yet — add .md files to src/content/experience/.
+        No experience entries yet.
       </p>
     )}
   </div>
@@ -48,6 +48,7 @@ function formatRange(start: string, end: string | undefined, current: boolean) {
 <style>
   .experience { padding-block: 30px; }
   .timeline { list-style: none; margin: 48px 0 0; padding: 0; border-left: 1px solid var(--color-border); }
+
   .timeline__item { position: relative; padding-left: 32px; padding-bottom: 48px; }
   .timeline__item::before {
     content: '';
